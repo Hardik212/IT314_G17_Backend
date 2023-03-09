@@ -1,4 +1,4 @@
-# IT314_project_17
+# IT314_G17_Backend
 ## A platform for creating and managing online polls and surveys.
 
 Description:
