@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 var validator = require("email-validator");
 dotenv = require('dotenv').config();
-const profilePicData = require('../data/profilePic.json');   // doubt on this one
+// const profilePicData = require('../data/Profilepic.json');   // doubt on this one
 
 // import models of DB
 const User = require('../models/User');
