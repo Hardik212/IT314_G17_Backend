@@ -14,7 +14,7 @@ const { UserProfile,UpadteProfile } = require('./profile/Profile');
 const { getUserRole } = require('./Static/UserRole');
 
 // import middleware
-const { checklogin } = require('./middleware/checklogin');
+const { checklogin } = require('./Middleware/Checklogin');
 
 
 
