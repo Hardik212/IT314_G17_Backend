@@ -13,13 +13,13 @@ const UserProfile = async (req, res) => {
     // check if the cookie is expired or not
     const myCookie = req.cookies.myCookie;
     if (myCookie && myCookie.expires < Date.now()) {
+        res.redirect('/auth/login');
         res.status(401).send({
             "message":"Session expired. Please login again."
         });
-        // res.redirect('/auth/login');
     }
 
-    let { username } = req.body;
+    let { userid,username } = req.body;
     try {
         const currUserProfile = await User.findOne({username});
         res.status(200).send({
@@ -55,7 +55,9 @@ const UpadteProfile = async (req, res) => {
     //validate the phone number
         if ( currUser.phone){
             if(isNaN(currUser.phone) || currUser.phone.length != 10) {
-                return res.status(400).send("Please enter a valid phone number.");
+                return res.status(400).send({
+                    "message":"Please enter a valid phone number"
+                });
             }
         }   
 
@@ -63,16 +65,16 @@ const UpadteProfile = async (req, res) => {
     if(currUser.email){
         const isvalidEmail = validator.validate(currUser.email);
         if (!isvalidEmail) {
-            return res.status(400).send("Please enter a valid email.");
+            return res.status(400).send({"message":"Please enter a valid email."});
         }    
     } 
     
     // encrypt the password if it is changed
-    if(currUser.password){
-        const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash(currUser.password, salt);
-        currUser.password = hashedPassword;
-    }
+    // if(currUser.password){
+    //     const salt = await bcrypt.genSalt(10);
+    //     const hashedPassword = await bcrypt.hash(currUser.password, salt);
+    //     currUser.password = hashedPassword;
+    // }
 
     // update the user object into the database
     User.findByIdAndUpdate(uID,currUser, {new:true})
