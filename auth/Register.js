@@ -6,7 +6,7 @@ dotenv = require('dotenv').config();
 
 // import models of DB
 const User = require('../models/User');
-const useroleData = require('../data/userRole.json');
+const useroleData = require('../data/Userrole.json');
 
 const expirationTime = new Date(Date.now() + 60*60*1000);
 

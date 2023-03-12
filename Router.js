@@ -7,7 +7,7 @@ const {
     LoginUser
 } = require('./auth/Register');
 
-const { UserProfile,UpadteProfile } = require('./auth/Profile');
+const { UserProfile,UpadteProfile } = require('./profile/Profile');
 
 
 // import static controller functions
@@ -22,12 +22,7 @@ router.get('/auth/profile', UserProfile);
 router.put('/updateProfile/:id', UpadteProfile);
 // router.put('/auth/profile/editProfile', editProfile);
 
-// default route for invalid routes
-router.post('*', (req, res) => {
-    res.status(404).send({
-        "message": "Invalid route."
-    });
-});
+
 
 // static apis
 router.get('/', (req, res) => {
@@ -38,6 +33,13 @@ router.get('/userrole',getUserRole);
 
 // static route for invalid routes
 router.get('*', (req, res) => {
+    res.status(404).send({
+        "message": "Invalid route."
+    });
+});
+
+// default route for invalid routes
+router.post('*', (req, res) => {
     res.status(404).send({
         "message": "Invalid route."
     });
