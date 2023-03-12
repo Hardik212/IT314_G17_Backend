@@ -1,5 +1,5 @@
 
-const useroleData = require('../data/userRole.json')
+const useroleData = require('../data/Userrole.json')
 
 //serve this file as get to the client write the production ready code
 const getUserRole = async (req, res) => {

@@ -8,9 +8,6 @@ dotenv = require('dotenv').config();
 const User = require('../models/User');
 const useroleData = require('../data/Userrole.json');
 
-const expirationTime = new Date(Date.now() + 60*60*1000);
-
-
 const RegisterUser = async (req, res) => {
     // read the username, password, email from the request body give code
     let { username, password, email, userrole } = req.body;
@@ -62,13 +59,13 @@ const RegisterUser = async (req, res) => {
         console.log(`User ${savedUser.username} saved to database.`);
 
          // Generate a JWT token for the user
-        const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET,{expiresIn: process.env.JWT_EXPIRY});
 
         // Set the JWT token as a cookie
-        res.cookie('token', token, {
+        res.cookie('jwttoken', token, {
             httpOnly: true,
-            secure: true,
-            expires: expirationTime,
+            // secure: true,
+            expires: new Date(Date.now() + process.env.COOKIE_EXPIRY * 24 * 60 * 60 * 1000),
         });
 
         savedUser.password = undefined;
@@ -117,13 +114,13 @@ const LoginUser = async (req, res) => {
         }
         
         // Generate a JWT token for the user
-        const token = jwt.sign({ userId: existingUserEmail._id }, process.env.JWT_SECRET);
+        const token = jwt.sign({ userId: existingUserEmail._id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRY });
 
         // Set the JWT token as a cookie
-        res.cookie('token', token, {
+        res.cookie('jwttoken', token, {
             httpOnly: true,
-            secure: true,
-            expires: expirationTime,
+            // secure: true,
+            expires: new Date(Date.now() + process.env.COOKIE_EXPIRY * 24 * 60 * 60 * 1000),
         });
 
         existingUserEmail.password = undefined;
