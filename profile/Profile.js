@@ -8,9 +8,8 @@ dotenv = require('dotenv').config();
 // import models of DB
 const User = require('../models/User');
 
-const UserProfile = async (req, res) => {
-
-
+const UserProfile = async (req, res) => {      
+    console.log("Entered UserProfile.")
     const username = req.params.username;
     try {
         const currUserProfile = await User.findOne({username});

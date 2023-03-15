@@ -59,12 +59,12 @@ const RegisterUser = async (req, res) => {
         console.log(`User ${savedUser.username} saved to database.`);
 
          // Generate a JWT token for the user
-        const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET,{expiresIn: process.env.JWT_EXPIRY});
+        const token = await jwt.sign({ userId: user._id }, process.env.JWT_SECRET,{expiresIn: process.env.JWT_EXPIRY});
 
         // Set the JWT token as a cookie
         res.cookie('jwttoken', token, {
             httpOnly: true,
-            // secure: true,
+            secure: false,    // trial and error
             expires: new Date(Date.now() + process.env.COOKIE_EXPIRY * 24 * 60 * 60 * 1000),
         });
 
@@ -117,8 +117,9 @@ const LoginUser = async (req, res) => {
         const token = jwt.sign({ userId: existingUserEmail._id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRY });
 
         // Set the JWT token as a cookie
-        res.cookie('jwttoken', token, {
+        res.cookie('jwttoken', token, { 
             httpOnly: true,
+            secure: false,    // trial and error
             // secure: true,
             expires: new Date(Date.now() + process.env.COOKIE_EXPIRY * 24 * 60 * 60 * 1000),
         });
