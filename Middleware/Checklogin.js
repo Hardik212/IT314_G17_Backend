@@ -1,22 +1,45 @@
+// require jwt
+const jwt = require('jsonwebtoken'); 
 
 const checklogin = (req, res, next) => {
     const myCookie = req.cookies.jwttoken;  
-    console.log(req.cookies)
-    // const myCookie = req.cookies.jwt;  
-    if(!myCookie) {
+    if(!myCookie) {      // no cookie generated
         res.status(401).send({
             "message":"Please login first."
         });
-    } else if (myCookie.expires < Date.now()) {    
-        res.status(401).send({
-            "message":"Session expired. Please login again."
-        });
-    } else {
-        res.status(200).send({
-            "message":`User has cookie ${myCookie}`
-        });
-        next();
+    } 
+    else{
+        try{
+            const decoded = jwt.verify(myCookie, process.env.JWT_SECRET);
+            req.user = decoded;
+            next();
+        } catch(err){
+            console.log(err);
+            res.status(401).send({
+                "message":"Session expired. Please login again."
+            });
+        }
     }
 }
+
+
+// const checklogin = (req, res, next) => {
+//     const myCookie = req.cookies.jwttoken;  
+//     console.log(req.cookies)
+//     // const myCookie = req.cookies.jwt;  
+//     if(!myCookie) {
+//         res.status(401).send({
+//             "message":"Please login first."
+//         });
+//     } 
+//     else if (myCookie.expires < Date.now()) {    
+//         res.status(401).send({
+//             "message":"Session expired. Please login again."
+//         });
+//     } else{
+//         console.log(`User has cookie ${myCookie}`)  
+//         next();        
+//     }         
+// }
 
 module.exports = { checklogin };

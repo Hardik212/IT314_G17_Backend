@@ -9,8 +9,9 @@ const User = require('../models/User');
 const useroleData = require('../data/Userrole.json');
 
 const RegisterUser = async (req, res) => {
+    console.log("RegisterUser called")
     // read the username, password, email from the request body give code
-    let { username, password, email, userrole } = req.body;
+    let { firstname, email, username, userrole, password } = req.body;
 
     // check whether all the fields are filled or not
     if (!username || !password || !email) {
@@ -51,23 +52,24 @@ const RegisterUser = async (req, res) => {
 
     // create the user object
    
-    const user = new User({ username, password: hashedPassword, email, role : userrole });
+    const user = new User({ username, password: hashedPassword, email, role : userrole, firstname});
 
     // save the user object into the mongodb database'
     try{
         const savedUser = await user.save();
-        console.log(`User ${savedUser.username} saved to database.`);
+        console.log(`User ${savedUser.username} saved to database.`); 
 
          // Generate a JWT token for the user
         const token = await jwt.sign({ userId: user._id }, process.env.JWT_SECRET,{expiresIn: process.env.JWT_EXPIRY});
 
         // Set the JWT token as a cookie
-        res.cookie('jwttoken', token, {
+        res.cookie('jwttoken', token, { 
             httpOnly: true,
-            secure: false,    // trial and error
+            secure: 'true',    // trial and error
+            sameSite: 'none',
             expires: new Date(Date.now() + process.env.COOKIE_EXPIRY * 24 * 60 * 60 * 1000),
         });
-
+        console.log(`Token: ${token}`)
         savedUser.password = undefined;
         res.status(200).send({
             "message":"User registered successfully.",
@@ -119,8 +121,8 @@ const LoginUser = async (req, res) => {
         // Set the JWT token as a cookie
         res.cookie('jwttoken', token, { 
             httpOnly: true,
-            secure: false,    // trial and error
-            // secure: true,
+            secure: 'true',    // trial and error
+            sameSite: 'none',
             expires: new Date(Date.now() + process.env.COOKIE_EXPIRY * 24 * 60 * 60 * 1000),
         });
 

@@ -9,7 +9,6 @@ dotenv = require('dotenv').config();
 const User = require('../models/User');
 
 const UserProfile = async (req, res) => {      
-    console.log("Entered UserProfile.")
     const username = req.params.username;
     try {
         const currUserProfile = await User.findOne({username});
@@ -17,7 +16,6 @@ const UserProfile = async (req, res) => {
             "message":"User profile displayed successfully.",
             "data": currUserProfile
         });
-
     } catch(err){
         res.status(500).send({
             "message":"Error displaying user profile.",
