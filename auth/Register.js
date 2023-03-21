@@ -62,9 +62,10 @@ const RegisterUser = async (req, res) => {
         const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET,{expiresIn: process.env.JWT_EXPIRY});
 
         // Set the JWT token as a cookie
-        res.cookie('jwttoken', token, {
+        res.cookie('token', token, {
             httpOnly: true,
-            // secure: true,
+            secure: true,
+            sameSite: 'none',
             expires: new Date(Date.now() + process.env.COOKIE_EXPIRY * 24 * 60 * 60 * 1000),
         });
 
@@ -117,9 +118,10 @@ const LoginUser = async (req, res) => {
         const token = jwt.sign({ userId: existingUserEmail._id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRY });
 
         // Set the JWT token as a cookie
-        res.cookie('jwttoken', token, {
+        res.cookie('token', token, {
             httpOnly: true,
-            // secure: true,
+            secure: 'true',
+            sameSite: 'none',
             expires: new Date(Date.now() + process.env.COOKIE_EXPIRY * 24 * 60 * 60 * 1000),
         });
 

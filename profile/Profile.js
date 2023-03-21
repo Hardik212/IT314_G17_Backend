@@ -12,12 +12,20 @@ const UserProfile = async (req, res) => {
 
 
     const username = req.params.username;
+    const userId = req.decoded.userId;
     try {
-        const currUserProfile = await User.findOne({username});
-        res.status(200).send({
-            "message":"User profile displayed successfully.",
-            "data": currUserProfile
-        });
+        const currUserProfile = await User.findOne({_id: userId});
+        if(currUserProfile.username != username){
+            return res.status(401).send({
+                "message":"You are not authorized to view this profile."
+            });
+        }
+        else{
+            res.status(200).send({
+                "message":"User profile displayed successfully.",
+                "data": currUserProfile
+            });
+        }
 
     } catch(err){
         res.status(500).send({
@@ -29,11 +37,9 @@ const UserProfile = async (req, res) => {
 
 const UpadteProfile = async (req, res) => {
 
-    // read the user details from the request body give code
     const uID = req.params.id;
     const currUser = req.body;
 
-    // if req is for changing the password then reject the request
     if(currUser.password){
         return res.status(400).send({
             "message":"Currently not authrized to change the password."

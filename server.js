@@ -13,7 +13,7 @@ const PORT = process.env.PORT || 3000;
 
 // create the express middleware
 app.use(bodyParser.json());
-app.use(cors());
+app.use(cors({ origin: true, credentials: true }));
 app.use(cookieParser());
 
 
