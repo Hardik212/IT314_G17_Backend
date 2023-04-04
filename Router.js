@@ -8,6 +8,7 @@ const {
 } = require('./auth/Register');
 
 const { UserProfile,UpadteProfile } = require('./profile/Profile');
+const SendpolltoUser = require('./Polls/SendUser');
 
 
 // import static controller functions
@@ -24,6 +25,9 @@ router.post('/auth/login', LoginUser);
 router.get('/auth/profile/:username',checklogin,UserProfile);
 router.put('/updateProfile/:id',checklogin, UpadteProfile);
 // router.put('/auth/profile/editProfile', editProfile);
+
+// polls and survey show routes
+router.get('/:id',SendpolltoUser);
 
 
 
