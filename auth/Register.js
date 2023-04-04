@@ -9,13 +9,14 @@ const User = require("../models/User");
 const useroleData = require("../data/Userrole.json");
 
 const RegisterUser = async (req, res) => {
-  // read the username, password, email from the request body give code
-  let { name, username, password, email, userrole } = req.body;
+    console.log("RegisterUser called")
+    // read the username, password, email from the request body give code
+    let { name, email, username, userrole, password } = req.body;
 
-  // check whether all the fields are filled or not
-  if (!name || !username || !password || !email) {
-    return res.status(400).send("Please fill all the required fields.");
-  }
+    // check whether all the fields are filled or not
+    if (!name || !username || !password || !email) {
+        return res.status(400).send("Please fill all the required fields.");
+    }
 
   if (!userrole) {
     userrole = "Customer";
@@ -48,48 +49,36 @@ const RegisterUser = async (req, res) => {
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(password, salt);
 
-  // create the user object
-
-  const user = new User({
-    name,
-    username,
-    password: hashedPassword,
-    email,
-    role: userrole,
-  });
+    // create the user object
+   
+    const user = new User({ name, username, password: hashedPassword, email, role : userrole});
 
   // save the user object into the mongodb database'
   try {
     const savedUser = await user.save();
     console.log(`User ${savedUser.username} saved to database.`);
 
-    // Generate a JWT token for the user
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
-      expiresIn: process.env.JWT_EXPIRY,
-    });
+        // Set the JWT token as a cookie
+        res.cookie('token', token, { 
+            httpOnly: true,
+            secure: true ,    // trial and error
+            sameSite: 'none',
+            expires: new Date(Date.now() + process.env.COOKIE_EXPIRY * 24 * 60 * 60 * 1000),
+        });
+        console.log(`Token: ${token}`)
+        savedUser.password = undefined;
+        res.status(200).send({
+            "message":"User registered successfully.",
+            "user": savedUser,
+        });
 
-    // Set the JWT token as a cookie
-    res.cookie("token", token, {
-      httpOnly: true,
-      secure: true,
-      sameSite: "none",
-      expires: new Date(
-        Date.now() + process.env.COOKIE_EXPIRY * 24 * 60 * 60 * 1000
-      ),
-    });
-
-    savedUser.password = undefined;
-    res.status(200).send({
-      message: "User registered successfully.",
-      user: savedUser,
-    });
-  } catch (err) {
-    console.log(err);
-    res.status(500).send({
-      message: "Error saving user to database.",
-      error: err,
-    });
-  }
+    } catch(err){
+        console.log(err);
+        res.status(500).send({
+            "message":"Error saving user to database.",
+            "error": err
+        });
+    }
 };
 
 // make a api for login user
@@ -131,30 +120,27 @@ const LoginUser = async (req, res) => {
       { expiresIn: process.env.JWT_EXPIRY }
     );
 
-    // Set the JWT token as a cookie
-    res.cookie("token", token, {
-      httpOnly: true,
-      secure: "true",
-      sameSite: "none",
-      expires: new Date(
-        Date.now() + process.env.COOKIE_EXPIRY * 24 * 60 * 60 * 1000
-      ),
-    });
+        // Set the JWT token as a cookie
+        res.cookie('token', token, { 
+            httpOnly: true,
+            secure: 'true',    // trial and error
+            sameSite: 'none',
+            expires: new Date(Date.now() + process.env.COOKIE_EXPIRY * 24 * 60 * 60 * 1000),
+        });
 
-    existingUserEmail.password = undefined;
-    res.status(200).send({
-      message: "User logged in successfully.",
-      user: existingUserEmail,
-    });
-  } catch (err) {
-    console.log(err);
-    res.status(500).send({
-      message: "Server error! Try again later.",
-      error: err,
-    });
-  }
-};
-
+        existingUserEmail.password = undefined;
+        res.status(200).send({
+            "message":"User logged in successfully.",
+            "user": existingUserEmail,
+        });
+    } catch(err){
+        console.log(err);
+        res.status(500).send({
+            "message":"Server error! Try again later.",
+            "error": err
+        });
+    };
+}
 // export both the functions
 module.exports = {
   RegisterUser,
