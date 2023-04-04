@@ -34,11 +34,9 @@ const UserProfile = async (req, res) => {
 
 const UpadteProfile = async (req, res) => {
 
-    // read the user details from the request body give code
     const uID = req.params.id;
     const currUser = req.body;
 
-    // if req is for changing the password then reject the request
     if(currUser.password){
         return res.status(400).send({
             "message":"Currently not authrized to change the password."
