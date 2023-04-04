@@ -11,10 +11,10 @@ const useroleData = require('../data/Userrole.json');
 const RegisterUser = async (req, res) => {
     console.log("RegisterUser called")
     // read the username, password, email from the request body give code
-    let { firstname, email, username, userrole, password } = req.body;
+    let { name, email, username, userrole, password } = req.body;
 
     // check whether all the fields are filled or not
-    if (!username || !password || !email) {
+    if (!name || !username || !password || !email) {
         return res.status(400).send("Please fill all the required fields.");
     }
 
@@ -52,7 +52,7 @@ const RegisterUser = async (req, res) => {
 
     // create the user object
    
-    const user = new User({ username, password: hashedPassword, email, role : userrole, firstname});
+    const user = new User({ name, username, password: hashedPassword, email, role : userrole});
 
     // save the user object into the mongodb database'
     try{
@@ -60,12 +60,12 @@ const RegisterUser = async (req, res) => {
         console.log(`User ${savedUser.username} saved to database.`); 
 
          // Generate a JWT token for the user
-        const token = await jwt.sign({ userId: user._id }, process.env.JWT_SECRET,{expiresIn: process.env.JWT_EXPIRY});
+        const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET,{expiresIn: process.env.JWT_EXPIRY});
 
         // Set the JWT token as a cookie
-        res.cookie('jwttoken', token, { 
+        res.cookie('token', token, { 
             httpOnly: true,
-            secure: 'true',    // trial and error
+            secure: true ,    // trial and error
             sameSite: 'none',
             expires: new Date(Date.now() + process.env.COOKIE_EXPIRY * 24 * 60 * 60 * 1000),
         });
@@ -119,7 +119,7 @@ const LoginUser = async (req, res) => {
         const token = jwt.sign({ userId: existingUserEmail._id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRY });
 
         // Set the JWT token as a cookie
-        res.cookie('jwttoken', token, { 
+        res.cookie('token', token, { 
             httpOnly: true,
             secure: 'true',    // trial and error
             sameSite: 'none',

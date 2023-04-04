@@ -17,10 +17,7 @@ const userSchema = new mongoose.Schema({
         type: String,
         default: "Customer"
     },
-    firstname: {
-        type: String,
-    },
-    lastname: {
+    name: {
         type: String,
     },
     bio: {
