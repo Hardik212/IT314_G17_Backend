@@ -20,11 +20,10 @@ const { checklogin } = require('./Middleware/Checklogin');
 
 
 // define routes for authentication
-router.post('/auth/register', RegisterUser);
-router.post('/auth/login', LoginUser);
-router.get('/auth/profile/:username',checklogin,UserProfile);
-router.put('/updateProfile/:id',checklogin, UpadteProfile);
-// router.put('/auth/profile/editProfile', editProfile);
+router.post('/auth/register', RegisterUser);    // route to signup page
+router.post('/auth/login', LoginUser);     // route to login page      
+router.get('/auth/profile/:username',checklogin,UserProfile);   // check login and then show profile
+router.put('/updateProfile/:id',checklogin, UpadteProfile);    // check login and then update profile
 
 // polls and survey show routes
 router.get('/:id',SendpolltoUser);

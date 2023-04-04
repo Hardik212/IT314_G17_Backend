@@ -8,9 +8,7 @@ dotenv = require('dotenv').config();
 // import models of DB
 const User = require('../models/User');
 
-const UserProfile = async (req, res) => {
-
-
+const UserProfile = async (req, res) => {      
     const username = req.params.username;
     const userId = req.decoded.userId;
     try {
@@ -25,8 +23,7 @@ const UserProfile = async (req, res) => {
                 "message":"User profile displayed successfully.",
                 "data": currUserProfile
             });
-        }
-
+        }   
     } catch(err){
         res.status(500).send({
             "message":"Error displaying user profile.",
