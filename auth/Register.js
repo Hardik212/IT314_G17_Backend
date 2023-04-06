@@ -28,7 +28,9 @@ const RegisterUser = async (req, res) => {
   // validate the email by library
   const isvalidEmail = validator.validate(email);
   if (!isvalidEmail) {
-    return res.status(400).send("Please enter a valid email.");
+    return res.status(400).send({
+      message:"Please enter a valid email."
+    });
   }
 
   // check whether the username and email is already existed or not
@@ -98,7 +100,7 @@ const LoginUser = async (req, res) => {
   // check whether all the fields are filled or not
   if (!email || !password) {
     return res.status(400).send({
-      message: "Please fill all the fields.",
+      error: "Please fill all the fields.",
     });
   }
 
@@ -107,7 +109,7 @@ const LoginUser = async (req, res) => {
     const existingUserEmail = await User.findOne({ email });
     if (!existingUserEmail) {
       return res.status(409).send({
-        message: "Invalid credentials in email.",
+        error: "Invalid credentials in email.",
       });
     }
 
@@ -118,7 +120,7 @@ const LoginUser = async (req, res) => {
     );
     if (!isPasswordCorrect) {
       return res.status(400).send({
-        message: "Invalid credentials in password.",
+        error: "Invalid credentials in password.",
       });
     }
 
@@ -147,8 +149,8 @@ const LoginUser = async (req, res) => {
   } catch (err) {
     console.log(err);
     res.status(500).send({
-      message: "Server error! Try again later.",
-      error: err,
+      error: "Server error! Try again later.",
+      errorMessage: err,
     });
   }
 };
