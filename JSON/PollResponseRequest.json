@@ -1,0 +1,24 @@
+{
+    "pollid":"6432b58da4c6a433ba2c61ea",
+    "responses":[
+        {
+            "questionid":"6432b58ca4c6a433ba2c61e4",
+            "questionresponse":["Nodejs is a javascript backend framework that will help to create APIs for the frontend use"]
+        },
+        {
+            "questionid":"6432b58ca4c6a433ba2c61e6",
+            "questionresponse":[
+                "1","4","7"
+            ]
+        },
+        {
+            "questionid":"6432b58ca4c6a433ba2c61e8",
+            "questionresponse":[
+                "I enjoyed being like this"
+            ]
+        }
+        
+    ]
+
+
+}

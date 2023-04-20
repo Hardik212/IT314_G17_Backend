@@ -1,0 +1,13 @@
+{
+    "message": "User registered successfully.",
+    "user": {
+        "username": "admin",
+        "email": "admin@gmail.com",
+        "role": "Customer",
+        "name": "admin",
+        "bio": "Just started surveying.",
+        "profilepic": "https://www.w3schools.com/w3images/avatar2.png",
+        "_id": "6432af682fa7e63ffe5e67f5",
+        "__v": 0
+    }
+}

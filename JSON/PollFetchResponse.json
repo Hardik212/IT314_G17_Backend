@@ -1,0 +1,33 @@
+{
+    "message": "poll successfully fetched",
+    "pollobject": {
+        "title": "This is the first polls",
+        "desription": "this is the description of the first polls",
+        "questions": [
+            {
+                "questionid": "6432b58ca4c6a433ba2c61e4",
+                "question": "What is nodejs?",
+                "type": "2",
+                "options": []
+            },
+            {
+                "questionid": "6432b58ca4c6a433ba2c61e6",
+                "question": "How you rate yourself on this?",
+                "type": "1",
+                "options": [
+                    "1",
+                    "2",
+                    "3",
+                    "4",
+                    "5"
+                ]
+            },
+            {
+                "questionid": "6432b58ca4c6a433ba2c61e8",
+                "question": "Tell me about yourself",
+                "type": "2",
+                "options": []
+            }
+        ]
+    }
+}

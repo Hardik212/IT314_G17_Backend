@@ -1,0 +1,79 @@
+{
+    "message": "fetched next 10 polls",
+    "feedItems": [
+        {
+            "creatorname": "admin",
+            "username": "admin",
+            "profilepic": "https://www.w3schools.com/w3images/avatar2.png",
+            "pollId": "643db2feaa991dbe2adccc46",
+            "pollTitle": "This is the second polls",
+            "pollDescription": "This is feed page test poll",
+            "createdAt": "2023-04-17T20:58:38.776Z",
+            "endedAt": null,
+            "questionType": "single",
+            "question": "How you rate yourself on this?",
+            "questiontype": "1",
+            "options": [
+                "1",
+                "2",
+                "3",
+                "4",
+                "5"
+            ],
+            "totalquestions": 1,
+            "totalresponses": 0
+        },
+        {
+            "creatorname": "admin",
+            "username": "admin",
+            "profilepic": "https://www.w3schools.com/w3images/avatar2.png",
+            "pollId": "6432b58da4c6a433ba2c61ea",
+            "pollTitle": "This is the first polls",
+            "pollDescription": "this is the description of the first polls",
+            "createdAt": "2023-04-17T21:02:31.072Z",
+            "endedAt": null,
+            "questionType": "multiple",
+            "totalquestions": 3,
+            "totalresponses": 1
+        },
+        {
+            "creatorname": "admin",
+            "username": "admin",
+            "profilepic": "https://www.w3schools.com/w3images/avatar2.png",
+            "pollId": "6432b558043a5f9d3b82652c",
+            "pollTitle": "This is the first polls",
+            "pollDescription": "this is the description of the first polls",
+            "createdAt": "2023-04-17T21:02:31.073Z",
+            "endedAt": null,
+            "questionType": "multiple",
+            "totalquestions": 3,
+            "totalresponses": 0
+        },
+        {
+            "creatorname": "admin",
+            "username": "admin",
+            "profilepic": "https://www.w3schools.com/w3images/avatar2.png",
+            "pollId": "6432b50dcae52283fd2dcff6",
+            "pollTitle": "This is the first polls",
+            "pollDescription": "this is the description of the first polls",
+            "createdAt": "2023-04-17T21:02:31.074Z",
+            "endedAt": null,
+            "questionType": "multiple",
+            "totalquestions": 3,
+            "totalresponses": 0
+        },
+        {
+            "creatorname": "Chaman",
+            "username": "chaman",
+            "profilepic": "https://www.w3schools.com/w3images/avatar2.png",
+            "pollId": "642ca2f248f0e28dff4dd8d7",
+            "pollTitle": "Life advise",
+            "pollDescription": "This poll will help me to take decisions of my life",
+            "createdAt": "2023-04-17T21:02:31.074Z",
+            "endedAt": null,
+            "questionType": "multiple",
+            "totalquestions": 3,
+            "totalresponses": 1
+        }
+    ]
+}
