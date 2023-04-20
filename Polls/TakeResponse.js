@@ -4,8 +4,8 @@ const Question = require('../models/Question');
 const User = require('../models/User');
 
 const TakeUserResponse = async (req, res) => {
+    console.log("laolfodwf  ")
    const {pollid,userid,responses} = req.body;
-
     if(!pollid){
         return res.status(401).send({
             "message":"pollid is required",
@@ -15,9 +15,7 @@ const TakeUserResponse = async (req, res) => {
     // check if id poll is exist or not
     let ispollexist;
     try{
-        ispollexist = await Poll.findOne({
-            "_id":pollid,
-        });
+        ispollexist = await Poll.findById(pollid);
     }catch(err){
         return res.status(401).send({
             "error":"internal server error",
@@ -120,4 +118,4 @@ const TakeUserResponse = async (req, res) => {
 
 
 
-module.exports = TakeUserResponse;
+module.exports = {TakeUserResponse};
