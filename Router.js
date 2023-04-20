@@ -38,6 +38,13 @@ router.post('/createpoll',createPolls); // add login check
 router.post('/feed/:num',getFeedItems);
 
 
+// follewers and following routes
+router.post('/follow/:id',checklogin,followUser);
+router.post('/unfollow/:id',checklogin,unfollowUser);
+router.post('/followers/:id',checklogin,getFollowers);
+router.post('/following/:id',checklogin,getFollowing);
+
+
 
 // static apis
 router.get('/', (req, res) => {
