@@ -2,7 +2,7 @@
     "message": "poll successfully fetched",
     "pollobject": {
         "title": "This is the first polls",
-        "desription": "this is the description of the first polls",
+        "description": "this is the description of the first polls",
         "questions": [
             {
                 "questionid": "6432b58ca4c6a433ba2c61e4",
