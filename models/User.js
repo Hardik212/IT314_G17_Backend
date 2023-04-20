@@ -18,6 +18,7 @@ const userSchema = new mongoose.Schema({
     },
     name: {
         type: String,
+        default: "Anonymous"
     },
     bio: {
         type: String,

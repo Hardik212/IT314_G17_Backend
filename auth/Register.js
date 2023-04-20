@@ -68,28 +68,27 @@ const RegisterUser = async (req, res) => {
     const savedUser = await user.save();
     console.log(`User ${savedUser.username} saved to database.`);
 
-    // Set the JWT token as a cookie
-    res.cookie("token", token, {
-      httpOnly: true,
-      secure: true, // trial and error
-      sameSite: "none",
-      expires: new Date(
-        Date.now() + process.env.COOKIE_EXPIRY * 24 * 60 * 60 * 1000
-      ),
-    });
-    console.log(`Token: ${token}`);
-    savedUser.password = undefined;
-    res.status(200).send({
-      message: "User registered successfully.",
-      user: savedUser,
-    });
-  } catch (err) {
-    console.log(err);
-    res.status(500).send({
-      message: "Error saving user to database.",
-      error: err,
-    });
-  }
+        // Set the JWT token as a cookie
+        const token = jwt.sign(
+            { userId: savedUser._id },
+            process.env.JWT_SECRET,
+            { expiresIn: process.env.JWT_EXPIRY }
+        );
+        console.log(`Token: ${token}`)
+        savedUser.password = undefined;
+        res.status(200).send({
+            "message":"User registered successfully.",
+            "user": savedUser,
+            "token": token,
+        });
+
+    } catch(err){
+        console.log(err);
+        res.status(500).send({
+            "message":"Error saving user to database.",
+            "error": err
+        });
+    }
 };
 
 // make a api for login user
@@ -131,29 +130,20 @@ const LoginUser = async (req, res) => {
       { expiresIn: process.env.JWT_EXPIRY }
     );
 
-    // Set the JWT token as a cookie
-    res.cookie("token", token, {
-      httpOnly: true,
-      secure: "true", // trial and error
-      sameSite: "none",
-      expires: new Date(
-        Date.now() + process.env.COOKIE_EXPIRY * 24 * 60 * 60 * 1000
-      ),
-    });
-
     existingUserEmail.password = undefined;
     res.status(200).send({
-      message: "User logged in successfully.",
-      user: existingUserEmail,
+        "message":"User logged in successfully.",
+        "user": existingUserEmail,
+        "token": token,
     });
-  } catch (err) {
-    console.log(err);
-    res.status(500).send({
-      error: "Server error! Try again later.",
-      errorMessage: err,
-    });
-  }
-};
+    } catch(err){
+        console.log(err);
+        res.status(500).send({
+            "message":"Server error! Try again later.",
+            "error": err
+        });
+    };
+}
 // export both the functions
 module.exports = {
   RegisterUser,

@@ -8,7 +8,9 @@ const {
 } = require('./auth/Register');
 
 const { UserProfile,UpadteProfile } = require('./profile/Profile');
-
+const SendpolltoUser = require('./Polls/SendUser');
+const TakeUserResponse = require('./Polls/TakeResponse');   
+const createPolls = require('./Polls/CreatePolls');     
 
 // import static controller functions
 const { getUserRole } = require('./Static/UserRole');
@@ -16,13 +18,24 @@ const { getUserRole } = require('./Static/UserRole');
 // import middleware
 const { checklogin } = require('./Middleware/Checklogin');
 
+// import feed page controller functions
+const getFeedItems = require('./FeedPage/GetFeedItems');
 
 
 // define routes for authentication
 router.post('/auth/register', RegisterUser);    // route to signup page
 router.post('/auth/login', LoginUser);     // route to login page      
-router.get('/auth/profile/:username',checklogin,UserProfile);   // check login and then show profile
+router.post('/auth/profile/:username',checklogin,UserProfile);   // check login and then show profile
 router.put('/updateProfile/:id',checklogin, UpadteProfile);    // check login and then update profile
+
+// polls and survey show routes
+router.post('/:id',SendpolltoUser);
+router.post('/takeresponse',TakeUserResponse);
+router.post('/createpoll',createPolls); // add login check
+
+
+// feed page routes
+router.post('/feed/:num',getFeedItems);
 
 
 
