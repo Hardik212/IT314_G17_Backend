@@ -49,9 +49,12 @@ const SendpolltoUser = async (req,res)=>{
 
 
         let questionobj = {};
+
+        questionobj.questionid = question._id;
         questionobj.question = question.question;
         questionobj.type = question.type;
         questionobj.options = question.options;
+        questionobj.count = question.count;
 
         pollobj.questions.push(questionobj);
     }

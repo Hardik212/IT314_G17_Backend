@@ -13,8 +13,17 @@ const PORT = process.env.PORT || 1337;
 
 // create the express middleware
 app.use(bodyParser.json());
-app.use(cors({ origin: true, credentials: true }));
+// allowonly localhost:5500
+
+// access control allow origin
+
+app.use(cors({ 
+    origin: true, 
+    credentials: true,
+}));
 app.use(cookieParser());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json());
 
 
 // routes

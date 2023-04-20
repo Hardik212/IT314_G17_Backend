@@ -59,17 +59,17 @@ const RegisterUser = async (req, res) => {
     console.log(`User ${savedUser.username} saved to database.`);
 
         // Set the JWT token as a cookie
-        res.cookie('token', token, { 
-            httpOnly: true,
-            secure: true ,    // trial and error
-            sameSite: 'none',
-            expires: new Date(Date.now() + process.env.COOKIE_EXPIRY * 24 * 60 * 60 * 1000),
-        });
+        const token = jwt.sign(
+            { userId: savedUser._id },
+            process.env.JWT_SECRET,
+            { expiresIn: process.env.JWT_EXPIRY }
+        );
         console.log(`Token: ${token}`)
         savedUser.password = undefined;
         res.status(200).send({
             "message":"User registered successfully.",
             "user": savedUser,
+            "token": token,
         });
 
     } catch(err){
@@ -120,19 +120,12 @@ const LoginUser = async (req, res) => {
       { expiresIn: process.env.JWT_EXPIRY }
     );
 
-        // Set the JWT token as a cookie
-        res.cookie('token', token, { 
-            httpOnly: true,
-            secure: 'true',    // trial and error
-            sameSite: 'none',
-            expires: new Date(Date.now() + process.env.COOKIE_EXPIRY * 24 * 60 * 60 * 1000),
-        });
-
-        existingUserEmail.password = undefined;
-        res.status(200).send({
-            "message":"User logged in successfully.",
-            "user": existingUserEmail,
-        });
+    existingUserEmail.password = undefined;
+    res.status(200).send({
+        "message":"User logged in successfully.",
+        "user": existingUserEmail,
+        "token": token,
+    });
     } catch(err){
         console.log(err);
         res.status(500).send({

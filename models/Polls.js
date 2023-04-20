@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const pollSchema = new mongoose.Schema({
     title: {
         type: String,
-        required: true,
+        default: 'Untitled Poll',
     },
     description: {
         type: String,
@@ -21,7 +21,16 @@ const pollSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref:'User',
         required:true
-    }
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now,
+    },
+    endedAt: {
+        type: Date,
+        default: null,
+    },
+    
 
 });
 
