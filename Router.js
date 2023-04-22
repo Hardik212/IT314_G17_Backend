@@ -21,16 +21,14 @@ const { checklogin } = require("./Middleware/Checklogin");
 // import feed page controller functions
 const getFeedItems = require('./FeedPage/GetFeedItems');
 
-<<<<<<< HEAD
 // analysis page APIs
 const {
   GetAllPollsByUser,
   getDetailsAboutPoll
 } = require("./Analysis/GetAllPollsByUser");
-=======
 // followers and following controller functions
 const {followUser, unfollowUser, getFollowers, getFollowing} = require("./profile/follow");
->>>>>>> 6fff3cd863696bd6a7844c8968f0cafd73ba90fe
+
 
 // define routes for authentication
 router.post("/auth/register", RegisterUser); // route to signup page
