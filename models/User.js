@@ -42,6 +42,12 @@ const userSchema = new mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: "User",
         },
+    ],
+    pollscreated: [             // polls created by the user
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Poll",
+        },
     ]
 
 });

@@ -11,18 +11,19 @@ const useroleData = require("../data/Userrole.json");
 const RegisterUser = async (req, res) => {
   console.log("RegisterUser called");
   // read the username, password, email from the request body give code
-  let { name, email, username, userrole, password } = req.body;
+  let { name, email, username, role, password } = req.body;
 
   // check whether all the fields are filled or not
   if (!name || !username || !password || !email) {
     return res.status(400).send("Please fill all the required fields.");
   }
 
-  if (!userrole) {
-    userrole = "Customer";
-  } else {
-    // map the number to the role
-    userrole = useroleData.find((item) => item.id == userrole).name;
+  if (!role) {
+    role = "user";
+  } else if(role!="admin" && role!="user"){
+    return res.status(400).send({
+      message: "Invalid role.",
+    });
   }
 
   // validate the email by library
@@ -58,7 +59,7 @@ const RegisterUser = async (req, res) => {
     username,
     password: hashedPassword,
     email,
-    role: userrole,
+    role,
   });
 
   var token = jwt.sign({ user_id: user._id }, process.env.JWT_SECRET);
@@ -144,8 +145,9 @@ const LoginUser = async (req, res) => {
         });
     };
 }
+
 // export both the functions
 module.exports = {
   RegisterUser,
-  LoginUser,
+  LoginUser
 };
