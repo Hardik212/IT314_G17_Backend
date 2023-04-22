@@ -5,10 +5,12 @@ const router = express.Router();
 const { RegisterUser, LoginUser } = require("./auth/Register");
 
 
-const { UserProfile,UpadteProfile } = require('./profile/Profile');
-const SendpolltoUser = require('./Polls/SendUser');
-const {TakeUserResponse} = require('./Polls/TakeResponse');   
-const createPolls = require('./Polls/CreatePolls');  
+const { UserProfile, UpadteProfile, OtherUserProfile } = require("./profile/Profile");
+const { removeUser, removePoll } = require("./Admin/privilages");
+const SendpolltoUser = require("./Polls/SendUser");
+const {TakeUserResponse} = require("./Polls/TakeResponse");
+const createPolls = require("./Polls/CreatePolls");
+
 const {getPromotedPolls,updatePromotedPolls,removePromotedPolls} = require('./FeedPage/GetPromotedPolls');   
 
 
@@ -21,26 +23,27 @@ const { checklogin } = require("./Middleware/Checklogin");
 // import feed page controller functions
 const getFeedItems = require('./FeedPage/GetFeedItems');
 
-<<<<<<< HEAD
-// analysis page APIs
+
+
 const {
   GetAllPollsByUser,
   getDetailsAboutPoll
 } = require("./Analysis/GetAllPollsByUser");
-=======
-// followers and following controller functions
 const {followUser, unfollowUser, getFollowers, getFollowing} = require("./profile/follow");
->>>>>>> 6fff3cd863696bd6a7844c8968f0cafd73ba90fe
+
 
 // define routes for authentication
 router.post("/auth/register", RegisterUser); // route to signup page
 router.post("/auth/login", LoginUser); // route to login page
 router.post("/auth/profile/:username", checklogin, UserProfile); // check login and then show profile
 router.post("/auth/otherprofile/:username", checklogin,OtherUserProfile); // show profile of other user
+router.put("/updateProfile/:id", checklogin, UpadteProfile); // check login and then update profile
+
 
 // routes for admin side
+router.post("/removeuser", checklogin,removeUser); // remove user
+router.post("/removepoll",checklogin, removePoll); // remove poll
 
-router.put("/updateProfile/:id", checklogin, UpadteProfile); // check login and then update profile
 
 // polls and survey show routes
 router.post('/getpoll/:id',SendpolltoUser);
@@ -66,6 +69,7 @@ router.post('/removepromotedpolls',checklogin,removePromotedPolls);
 //analysis page routes
 router.post('/getallpollsbyuser',checklogin,GetAllPollsByUser);
 router.post('/getdetailsaboutPoll',checklogin,getDetailsAboutPoll);
+
 
 // static apis
 router.get("/", (req, res) => {
