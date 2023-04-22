@@ -265,6 +265,19 @@ const removePoll = async (req, res) => {
         });
     }
 
+    // if the poll is promoted then remove it from the promoted polls list
+    try{
+        await PromotedPoll.findOneAndDelete({
+            pollid: poll._id
+        });
+    } catch(err){
+    res.status(500).send({
+        "message":"Error removing poll from promoted polls.",
+        "error": err
+    });
+    }
+
+
     // remove the poll from the user's pollscreated list
     if(poll.creator){
         await User.findByIdAndUpdate(poll.creator, {$pull: {pollscreated: poll._id}});

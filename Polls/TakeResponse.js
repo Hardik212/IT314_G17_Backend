@@ -4,121 +4,81 @@ const Question = require("../models/Question");
 const User = require("../models/User");
 
 const TakeUserResponse = async (req, res) => {
-  const { pollid, userid, responses } = req.body;
-  console.log(pollid, userid, responses);
-  if (!pollid) {
-    return res.status(401).send({
-      message: "pollid is required",
-    });
-  }
-
-  // check if id poll is exist or not
-  let ispollexist;
-  console.log("sdadasd");
-  try {
-    ispollexist = await Poll.findById(pollid);
-  } catch (err) {
-    return res.status(401).send({
-      error: "internal server error",
-      "error-message": err,
-    });
-  }
-
-  if (!ispollexist) {
-    return res.status(401).send({
-      error: "poll not exist",
-    });
-  }
-
-  // check if user already responded or not
-  let isuserresponded = false;
-  if (userid) {
-    try {
-      isuserresponded = await Response.findOne({
-        pollid: pollid,
-        userid: userid,
-      });
-    } catch (err) {
-      return res.status(401).send({
-        error: "internal server error",
-        "error-message": err,
-      });
+   const {pollid,userid,responses} = req.body;
+    if(!pollid){
+        return res.status(401).send({
+            "message":"pollid is required",
+        })
     }
-  }
 
-  if (isuserresponded) {
-    return res.status(401).send({
-      error: "user already responded",
-    });
-  }
-
-  // check if all questions are answered or not
-  let isallquestionsanswered = true;
-  for (let j = 0; j < responses.length; j++) {
-    // remove the starting and ending spaces
-    if (responses[j].questionresponse) {
-      for (let k = 0; k < responses[j].questionresponse.length; k++) {
-        responses[j].questionresponse[k] =
-          responses[j].questionresponse[k].trim();
-      }
-    }
-    if (
-      !responses[j].questionresponse ||
-      responses[j].questionresponse.length == 0 ||
-      responses[j].questionresponse == ""
-    ) {
-      isallquestionsanswered = false;
-      break;
-    } else {
-      // if type is 1 then string consiste of numbers only
-      let questiontype;
-      try {
-        const question = await Question.findOne({
-          _id: responses[j].questionid,
-        });
-        questiontype = question.type;
-      } catch (err) {
+    // check if id poll is exist or not
+    let ispollexist;
+    try{
+        ispollexist = await Poll.findById(pollid);
+    }catch(err){
         return res.status(401).send({
           error: "internal server error",
           "error-message": err,
         });
-      }
-      if (questiontype == "1") {
-        console.log("type 1");
-        for (let k = 0; k < responses[j].questionresponse.length; k++) {
-          if (isNaN(responses[j].questionresponse[k])) {
-            isallquestionsanswered = false;
-            break;
-          }
-        }
-      }
     }
-  }
-  if (!isallquestionsanswered) {
-    return res.status(401).send({
-      error: "all questions are not answered",
-    });
-  }
 
-  // save the response
-  let response = new Response({
-    pollid: pollid,
-    userid: userid,
-    answers: responses,
-  });
+    if(!ispollexist){
+        return res.status(401).send({
+            "message":"poll not found",
+        })
+    }
 
-  try {
-    await response.save();
-  } catch (err) {
-    return res.status(401).send({
-      error: "internal server error",
-      "error-message": err,
-    });
-  }
+    const schemaresponse = await Response.findOne({pollid:pollid});
 
-  return res.status(200).send({
-    message: "Your response saved successfully",
-  });
+    // save user to database
+    // update the count in the database response by the given response
+    let userresponse = [];
+    for(let i=0;i<responses.length;i++){
+        if(responses[i].questionresponse.length===0){
+            return res.status(401).send({
+                "message":"please select atleast one option",
+            })
+        }
+        else if(responses[i].questionid == schemaresponse.answers[i].questionid){
+            console.log(responses[i].questionresponse)
+            userresponse.push(responses[i].questionresponse);
+            await Response.findOneAndUpdate({
+              "pollid":pollid,
+              "answers.questionid":responses[i].questionid,
+            },{
+              $push:{
+                "answers.$.questionresponse":responses[i].questionresponse,
+              }
+            },{
+              upsert:true,
+              multi:true
+            })
+        }
+
+    }
+
+    
+    // push the userresponse to the database
+    try{
+        const savedresponse = await Response.findOneAndUpdate({
+            "pollid":pollid,
+        },{
+            $push:{
+                "responses":userresponse,
+            }
+        });
+        console.log(savedresponse);
+    }catch(err){
+        return res.status(401).send({
+            "message":"internal server error",
+            "error":err,
+        })
+    }
+
+    return res.status(200).send({
+        "message":"response saved successfully!",
+        "userresponse":userresponse,
+    });  
 };
 
-module.exports = TakeUserResponse;
+module.exports = {TakeUserResponse};

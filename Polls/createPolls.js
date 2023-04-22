@@ -1,7 +1,7 @@
 const Poll = require('../models/Polls');
 const Question = require('../models/Question');
 const User = require('../models/User');
-
+const Response = require('../models/Response')
 
 const createPolls = async (req, res) => {
     const { title, description, questions, userid } = req.body;
@@ -65,11 +65,12 @@ const createPolls = async (req, res) => {
             await question.save();
         }catch(err){
             return res.status(401).send({
-                "error":"internal server error",
+                "error":"internal server error first",
                 "error-message":err
             })
         }
         questionids.push(question._id);
+
     }
 
     // create poll
@@ -84,9 +85,33 @@ const createPolls = async (req, res) => {
         await User.findByIdAndUpdate(userid, {$push: {pollscreated: poll._id}});
     }catch(err){
         return res.status(401).send({
-            "error":"internal server error",
+            "error":"internal server error second",
             "error-message":err
         })
+    }
+
+    // ek response khali banay
+    questionidresponseobj = [];
+    for(let i=0;i<questionids.length;i++){
+        questionidresponseobj.push({
+            "questionid":questionids[i],
+            "questionresponse":[]
+        })
+    }
+    let response = new Response({
+        "pollid":poll._id,
+        "answers":questionidresponseobj,
+        "userresponse":[]
+    });
+    console.log(response);
+    console.log(poll._id);
+    try{
+        await response.save();
+    }catch(err){
+        return res.status(401).send({
+            "error":"internal server error third",
+            "error-message":err
+        })  
     }
 
     return res.status(200).send({

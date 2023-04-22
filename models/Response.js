@@ -17,12 +17,16 @@ const responseSchema = new mongoose.Schema({
                 ref:'Question',
                 required:true,
             },
-            questionresponse : {
-                type: Array,
-            },
-
+            questionresponse : [
+                {
+                    type:String, 
+                }
+            ],
         }
-    ]
+    ],
+    responses:{
+        type:Array,
+    }
 });
 
 const Response = mongoose.model('Response', responseSchema);

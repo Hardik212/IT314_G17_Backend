@@ -1,0 +1,66 @@
+{
+    "message": "poll analysis found",
+    "pollanalysisobj": [
+        {
+            "questionid": "64440ab912b25cc99d279261",
+            "question": {
+                "_id": "64440ab912b25cc99d279261",
+                "question": "What is Software engineering?",
+                "type": "2",
+                "options": [],
+                "__v": 0
+            },
+            "optionsfrequency": [
+                "Nodejs is a javascrIs for the frontend use",
+                "Nodejs is a javascrIs for the frontend use",
+                "Nodejs is a javascrIs for the frontend use"
+            ]
+        },
+        {
+            "questionid": "64440ab912b25cc99d279263",
+            "optionsfrequency": {
+                "1": 3
+            },
+            "question": {
+                "_id": "64440ab912b25cc99d279263",
+                "question": "What is your positions",
+                "type": "1",
+                "options": [
+                    "frontend",
+                    "backend",
+                    "designer",
+                    "tester"
+                ],
+                "__v": 0
+            }
+        },
+        {
+            "responses": [
+                [
+                    [
+                        "Nodejs is a javascrIs for the frontend use"
+                    ],
+                    [
+                        "1"
+                    ]
+                ],
+                [
+                    [
+                        "Nodejs is a javascrIs for the frontend use"
+                    ],
+                    [
+                        "1"
+                    ]
+                ],
+                [
+                    [
+                        "Nodejs is a javascrIs for the frontend use"
+                    ],
+                    [
+                        "1"
+                    ]
+                ]
+            ]
+        }
+    ]
+}
