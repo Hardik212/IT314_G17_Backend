@@ -19,6 +19,8 @@ const checklogin = (req, res, next) => {
                 });
             }
             req.decoded = decoded;
+            console.log("here in checklogin");
+            console.log(decoded)
             next();
         } catch(err){
             console.log(err);

@@ -81,6 +81,7 @@ const createPolls = async (req, res) => {
     });
     try{
         await poll.save();
+        await User.findByIdAndUpdate(userid, {$push: {pollscreated: poll._id}});
     }catch(err){
         return res.status(401).send({
             "error":"internal server error",

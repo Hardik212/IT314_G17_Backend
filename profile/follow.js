@@ -1,6 +1,3 @@
-const express = require('express');
-const jwt = require('jsonwebtoken');
-var validator = require("email-validator");
 dotenv = require('dotenv').config();
 const User = require('../models/User');
 
