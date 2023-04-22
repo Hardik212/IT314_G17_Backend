@@ -5,7 +5,8 @@ const PromotedSchema = new mongoose.Schema({
     pollid: [{
         type: mongoose.Schema.Types.ObjectId,
         ref:'Poll',
-        required:true
+        required:true,
+        unique:true
     }],
 });
 

@@ -1,0 +1,16 @@
+{
+    "message": "poll created successfully",
+    "pollurl": "http://localhost:3000/api/6432b58da4c6a433ba2c61ea",
+    "poll": {
+        "title": "This is the first polls",
+        "description": "this is the description of the first polls",
+        "questions": [
+            "6432b58ca4c6a433ba2c61e4",
+            "6432b58ca4c6a433ba2c61e6",
+            "6432b58ca4c6a433ba2c61e8"
+        ],
+        "creator": "6432af682fa7e63ffe5e67f5",
+        "_id": "6432b58da4c6a433ba2c61ea",
+        "__v": 0
+    }
+}
