@@ -4,10 +4,13 @@ const router = express.Router();
 // import controller functions
 const { RegisterUser, LoginUser } = require("./auth/Register");
 
-const { UserProfile, UpadteProfile, OtherUserProfile } = require("./profile/Profile");
-const SendpolltoUser = require("./Polls/SendUser");
-const TakeUserResponse = require("./Polls/TakeResponse");
-const createPolls = require("./Polls/CreatePolls");
+
+const { UserProfile,UpadteProfile } = require('./profile/Profile');
+const SendpolltoUser = require('./Polls/SendUser');
+const {TakeUserResponse} = require('./Polls/TakeResponse');   
+const createPolls = require('./Polls/CreatePolls');  
+const {getPromotedPolls,updatePromotedPolls,removePromotedPolls} = require('./FeedPage/GetPromotedPolls');   
+
 
 // import static controller functions
 const { getUserRole } = require("./Static/UserRole");
@@ -16,7 +19,7 @@ const { getUserRole } = require("./Static/UserRole");
 const { checklogin } = require("./Middleware/Checklogin");
 
 // import feed page controller functions
-const getFeedItems = require("./FeedPage/GetFeedItems");
+const getFeedItems = require('./FeedPage/GetFeedItems');
 
 // followers and following controller functions
 const {followUser, unfollowUser, getFollowers, getFollowing} = require("./profile/follow");
@@ -32,12 +35,7 @@ router.post("/auth/otherprofile/:username", checklogin,OtherUserProfile); // sho
 router.put("/updateProfile/:id", checklogin, UpadteProfile); // check login and then update profile
 
 // polls and survey show routes
-router.post("/getpoll/:id", SendpolltoUser);
-router.post("/takeresponse", TakeUserResponse);
-router.post("/createpoll", createPolls); // add login check
-
-// feed page routes
-router.post('/feed/:num',getFeedItems);
+router.post('/getpoll/:id',SendpolltoUser);
 
 
 // follewers and following routes
@@ -46,6 +44,16 @@ router.post('/unfollow/:username',checklogin,unfollowUser);
 router.post('/followers',checklogin,getFollowers);
 router.post('/following',checklogin,getFollowing);
 
+
+router.post('/takeresponse',TakeUserResponse);
+router.post('/createpoll',createPolls); // add login check
+
+
+// feed page routes feedpage + promoted polls
+router.post('/feed/:num',getFeedItems);
+router.post('/getpromoted',checklogin,getPromotedPolls);
+router.post('/updatepromoted',checklogin,updatePromotedPolls);
+router.post('/removepromotedpolls',checklogin,removePromotedPolls);
 
 
 // static apis
