@@ -85,8 +85,50 @@ const UpadteProfile = async (req, res) => {
    
 };
 
+// function to get the profile of other user
+const OtherUserProfile = async (req, res) => {
+    const targetUsername = req.params.username;
+    const userId = req.decoded.userId;
+
+    // check if the user is a valid user
+    if(!User.findById(userId)){
+        return res.status(400).send({
+            "message":"You are not authorized to view this profile."
+        });
+    }
+
+    // find the user of the target user from the username
+    const targetUser = await User.findOne({username: targetUsername});
+    if(!targetUser){
+        return res.status(400).send({
+            "message":"Target user does not exist."
+        });
+    }
+    // check if the user wants to view his own profile
+    if(targetUser._id == userId){
+        return res.status(400).send({
+            "message":"You are not authorized to view this profile."            
+        });
+    }
+
+
+    // return the profile of the target user
+    res.status(200).send({
+        "message":"User profile displayed successfully.",
+        "data": targetUser
+    });
+};
+
+    
+
+
+
+
+
+
 // export the functions
 module.exports = {
     UserProfile,
-    UpadteProfile
+    UpadteProfile,
+    OtherUserProfile
 };
