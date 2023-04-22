@@ -19,13 +19,14 @@ const responseSchema = new mongoose.Schema({
             },
             questionresponse : [
                 {
-                    type:String,
-                    
+                    type:String, 
                 }
-            ]
-
+            ],
         }
-    ]
+    ],
+    responses:{
+        type:Array,
+    }
 });
 
 const Response = mongoose.model('Response', responseSchema);

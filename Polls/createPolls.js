@@ -99,7 +99,8 @@ const createPolls = async (req, res) => {
     }
     let response = new Response({
         "pollid":poll._id,
-        "answers":questionidresponseobj
+        "answers":questionidresponseobj,
+        "userresponse":[]
     });
     console.log(response);
     console.log(poll._id);
