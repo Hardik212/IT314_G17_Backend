@@ -23,8 +23,6 @@ const { checklogin } = require("./Middleware/Checklogin");
 // import feed page controller functions
 const getFeedItems = require('./FeedPage/GetFeedItems');
 
-
-
 const {
   GetAllPollsByUser,
   getDetailsAboutPoll
