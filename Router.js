@@ -4,11 +4,13 @@ const router = express.Router();
 // import controller functions
 const { RegisterUser, LoginUser } = require("./auth/Register");
 
+
 const { UserProfile,UpadteProfile } = require('./profile/Profile');
 const SendpolltoUser = require('./Polls/SendUser');
 const {TakeUserResponse} = require('./Polls/TakeResponse');   
 const createPolls = require('./Polls/CreatePolls');  
 const {getPromotedPolls,updatePromotedPolls,removePromotedPolls} = require('./FeedPage/GetPromotedPolls');   
+
 
 // import static controller functions
 const { getUserRole } = require("./Static/UserRole");
@@ -19,20 +21,37 @@ const { checklogin } = require("./Middleware/Checklogin");
 // import feed page controller functions
 const getFeedItems = require('./FeedPage/GetFeedItems');
 
+<<<<<<< HEAD
 // analysis page APIs
 const {
   GetAllPollsByUser,
   getDetailsAboutPoll
 } = require("./Analysis/GetAllPollsByUser");
+=======
+// followers and following controller functions
+const {followUser, unfollowUser, getFollowers, getFollowing} = require("./profile/follow");
+>>>>>>> 6fff3cd863696bd6a7844c8968f0cafd73ba90fe
 
 // define routes for authentication
 router.post("/auth/register", RegisterUser); // route to signup page
 router.post("/auth/login", LoginUser); // route to login page
 router.post("/auth/profile/:username", checklogin, UserProfile); // check login and then show profile
+router.post("/auth/otherprofile/:username", checklogin,OtherUserProfile); // show profile of other user
+
+// routes for admin side
+
 router.put("/updateProfile/:id", checklogin, UpadteProfile); // check login and then update profile
 
 // polls and survey show routes
 router.post('/getpoll/:id',SendpolltoUser);
+
+
+// follewers and following routes
+router.post('/follow/:username',checklogin,followUser);
+router.post('/unfollow/:username',checklogin,unfollowUser);
+router.post('/followers',checklogin,getFollowers);
+router.post('/following',checklogin,getFollowing);
+
 
 router.post('/takeresponse',TakeUserResponse);
 router.post('/createpoll',createPolls); // add login check
