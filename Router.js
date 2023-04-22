@@ -4,10 +4,11 @@ const router = express.Router();
 // import controller functions
 const { RegisterUser, LoginUser } = require("./auth/Register");
 
-const { UserProfile, UpadteProfile } = require("./profile/Profile");
-const SendpolltoUser = require("./Polls/SendUser");
-const TakeUserResponse = require("./Polls/TakeResponse");
-const createPolls = require("./Polls/CreatePolls");
+const { UserProfile,UpadteProfile } = require('./profile/Profile');
+const SendpolltoUser = require('./Polls/SendUser');
+const {TakeUserResponse} = require('./Polls/TakeResponse');   
+const createPolls = require('./Polls/CreatePolls');  
+const {getPromotedPolls,updatePromotedPolls,removePromotedPolls} = require('./FeedPage/GetPromotedPolls');   
 
 // import static controller functions
 const { getUserRole } = require("./Static/UserRole");
@@ -16,7 +17,7 @@ const { getUserRole } = require("./Static/UserRole");
 const { checklogin } = require("./Middleware/Checklogin");
 
 // import feed page controller functions
-const getFeedItems = require("./FeedPage/GetFeedItems");
+const getFeedItems = require('./FeedPage/GetFeedItems');
 
 // define routes for authentication
 router.post("/auth/register", RegisterUser); // route to signup page
@@ -25,12 +26,17 @@ router.post("/auth/profile/:username", checklogin, UserProfile); // check login 
 router.put("/updateProfile/:id", checklogin, UpadteProfile); // check login and then update profile
 
 // polls and survey show routes
-router.post("/getpoll/:id", SendpolltoUser);
-router.post("/takeresponse", TakeUserResponse);
-router.post("/createpoll", createPolls); // add login check
+router.post('/getpoll/:id',SendpolltoUser);
 
-// feed page routes
-router.post("/feed/:num", getFeedItems);
+router.post('/takeresponse',TakeUserResponse);
+router.post('/createpoll',createPolls); // add login check
+
+
+// feed page routes feedpage + promoted polls
+router.post('/feed/:num',getFeedItems);
+router.post('/getpromoted',checklogin,getPromotedPolls);
+router.post('/updatepromoted',checklogin,updatePromotedPolls);
+router.post('/removepromotedpolls',checklogin,removePromotedPolls);
 
 // static apis
 router.get("/", (req, res) => {
