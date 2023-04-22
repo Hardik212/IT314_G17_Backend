@@ -1,8 +1,17 @@
 const Promoted = require('../models/Promoted');
 const Poll = require('../models/Polls');
 const Response = require('../models/Response');
+const User = require('../models/User');
 
 const getPromotedPolls = async (req, res) => {
+
+    // decoded userid
+    const {userid} = req.decoded.id;
+
+    const userinfo = await User.findById(userid);
+    if(userinfo.role != 'admin'){
+        return res.status(401).json({ message: 'Unauthorized' });
+    }
 
     try {
         const promotedPolls = await Promoted.find();
@@ -17,6 +26,12 @@ const getPromotedPolls = async (req, res) => {
 
 const updatePromotedPolls = async (req, res) => {
     const {pollid} = req.body;
+    const {userid} = req.decoded.id;
+
+    const userinfo = await User.findById(userid);
+    if(userinfo.role != 'admin'){
+        return res.status(401).json({ message: 'Unauthorized' });
+    }
     try {
         const ispollExist = await Poll.findById(pollid);
         if(!ispollExist) {
@@ -48,6 +63,12 @@ const updatePromotedPolls = async (req, res) => {
 
 // remove promoted poll
 const removePromotedPolls = async (req, res) => {
+    const {userid} = req.decoded.id;
+
+    const userinfo = await User.findById(userid);
+    if(userinfo.role != 'admin'){
+        return res.status(401).json({ message: 'Unauthorized' });
+    }
     const {pollid} = req.body;
     try {
         const ispollExist = await Poll.findById(pollid);
