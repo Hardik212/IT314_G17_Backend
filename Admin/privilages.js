@@ -4,57 +4,6 @@ const Question = require('../models/Question');
 dotenv = require('dotenv').config();
 
 
-// // make function to get all users
-// const getAllUsers = async (req, res) => {
-    
-//     // check if the admin is a valid user and is an admin
-//     let admin = await User.findById(req.decoded.userId);
-//     if(!admin || admin.role != "admin"){
-//         return res.status(400).send({
-//             "message":"You are not authorized to perform this action."
-//         });
-//     }
-
-//     try {
-//         const allUsers = await User.find();
-//         res.status(200).send({
-//             "message":"All users fetched successfully.",
-//             "data": allUsers
-//         });
-//     } catch(err){
-//         res.status(500).send({
-//             "message":"Error fetching all users.",
-//             "error": err
-//         });
-//     }
-
-// };
-
-// // make function to get all polls
-// const getAllPolls = async (req, res) => {
-
-//     // check if the admin is a valid user and is an admin
-//     let admin = await User.findById(req.decoded.userId);
-//     if(!admin || admin.role != "admin"){
-//         return res.status(400).send({
-//             "message":"You are not authorized to perform this action."
-//         });
-//     }
-    
-//     try {
-//         const allPolls = await Poll.find();
-//         res.status(200).send({
-//             "message":"All polls fetched successfully.",
-//             "data": allPolls
-//         });
-//     } catch(err){
-//         res.status(500).send({
-//             "message":"Error fetching all polls.",
-//             "error": err
-//         });
-//     }
-// };
-
 
 // make function to remove a user
 const removeUser = async (req, res) => {
@@ -145,70 +94,6 @@ const removeUser = async (req, res) => {
     // }
 
     
-    
-    
-
-
-    // // if the poll is already deleted then remove from the user's pollscreated array
-    // for(let i=0; i<removinguser.pollscreated.length; i++){
-    //     try{
-    //         const poll = await Poll.findById(removinguser.pollscreated[i]);
-    //         if(!poll){
-        //             await User.findByIdAndUpdate(removinguser._id, {$pull: {pollscreated: removinguser.pollscreated[i]}});
-    //         }
-
-
-
-
-    // find all the poll objects of the user
-    // let userpolls = []; 
-    
-    // for(let i=0; i<removinguser.pollscreated.length; i++){
-
-    //     const poll = await Poll.findById(removinguser.pollscreated[i]);
-    //     if(!poll){
-    //         // remove the poll id from the user's pollscreated array
-
-    //     }else{
-    //         try{
-    //             userpolls.push(poll);
-    //         } catch(err){
-    //             res.status(500).send({
-    //                 "message":"Error removing user polls.",
-    //                 "error": err
-    //             });
-    //         }
-    //     }
-    // }
-
-    // // remove all the questions of the polls
-    // console.log(userpolls);
-    // console.log(userpolls.length);
-    // console.log("lalo");
-    // for(let i=0; i<userpolls.length; i++){
-    //     for(let j=0;j<userpolls[i].questions.length; j++){
-//         try{
-    //             await Question.findByIdAndDelete(userpolls[i].questions[j]);
-    //         } catch(err){
-        //             res.status(500).send({
-            //                 "message":"Error removing user poll questions.",
-            //                 "error": err 
-            //             });
-            //         }
-            //     }
-            // }
-            
-    // remove all the polls of the user
-    // for(let i=0; i<userpolls.length; i++){
-    //     try{
-    //         await Poll.findByIdAndDelete(userpolls[i]._id);
-    //     } catch(err){
-    //         res.status(500).send({
-    //                 "message":"Error removing user polls.",
-    //                 "error": err
-    //             });
-    //         }
-    //     }
             
     // remove user from following list of its followers
     for(let i=0; i<removinguser.followers.length; i++){
@@ -314,13 +199,97 @@ const removePoll = async (req, res) => {
 
 };
 
+// promote a user to admin
+const promoteUser = async (req, res) => {
+    const {userid} = req.body;
+
+    // check if the admin is a valid user and is an admin
+    let admin = await User.findById(req.decoded.userId);
+    if(!admin || admin.role != "admin"){
+        return res.status(400).send({
+            "message":"You are not authorized to perform this action."
+        });
+    }
+
+    // check if the user to be promoted is a valid user
+    const promotinguser = await User.findById(userid);
+    if(!promotinguser){
+        return res.status(400).send({
+            "message":"User does not exist."
+        });
+    }
+
+    // check is the user is already an admin
+    if(promotinguser.role == "admin"){
+        return res.status(400).send({
+            "message":"User is already an admin."
+        });
+    }
+
+    // promote the user
+    try{
+        await User.findByIdAndUpdate(promotinguser._id, {role: "admin"});
+        return res.status(200).send({
+            "message":"User promoted successfully."
+        });
+    } catch(err){
+        res.status(500).send({
+            "message":"Error promoting user.",
+            "error": err
+        });
+    }
+
+};
+
+// demote a user to normal user
+const demoteUser = async (req, res) => {
+    const {userid} = req.body;
+
+    // check if the admin is a valid user and is an admin
+    let admin = await User.findById(req.decoded.userId);
+    if(!admin || admin.role != "admin"){
+        return res.status(400).send({
+            "message":"You are not authorized to perform this action."
+        });
+    }
+
+    // check if the user to be demoted is a valid user
+    const demotinguser = await User.findById(userid);
+    if(!demotinguser){
+        return res.status(400).send({
+            "message":"User does not exist."
+        });
+    }
+
+    // check if the user is already a normal user
+    if(demotinguser.role == "user"){
+        return res.status(400).send({
+            "message":"User is already a normal user."
+        });
+    }
+
+    // demote the user
+    try{
+        await User.findByIdAndUpdate(demotinguser._id, {role: "user"});
+        return res.status(200).send({
+            "message":"User demoted successfully."
+        });
+    } catch(err){
+        res.status(500).send({
+            "message":"Error demoting user.",
+            "error": err
+        });
+    }
+};
 
 
+
+    
 module.exports = {
-    // getAllUsers,
-    // getAllPolls,
     removeUser,
-    removePoll
+    removePoll,
+    promoteUser,
+    demoteUser
 };
 
     
