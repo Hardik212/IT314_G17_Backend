@@ -28,7 +28,7 @@ const getPromotedPolls = async (req, res) => {
 
 const updatePromotedPolls = async (req, res) => {
     const {pollid} = req.body;
-    const {userid} = req.decoded.userId;
+    const userid = req.decoded.userId;
 
     const userinfo = await User.findById(userid);
     if(userinfo.role != 'admin'){
@@ -65,7 +65,7 @@ const updatePromotedPolls = async (req, res) => {
 
 // remove promoted poll
 const removePromotedPolls = async (req, res) => {
-    const {userid} = req.decoded.userId;
+    const userid = req.decoded.userId;
 
     const userinfo = await User.findById(userid);
     if(userinfo.role != 'admin'){
@@ -77,7 +77,7 @@ const removePromotedPolls = async (req, res) => {
         if(!ispollExist) {
             return res.status(404).json({ message: 'Poll not found' });
         }
-        const responsefromdb = await Poll.findOneAndDelete({pollid: pollid});
+        const responsefromdb = await Promoted.findOneAndDelete({pollid: pollid});
         return res.status(200).json({
             message: 'Poll removed from promoted polls',
             data: responsefromdb

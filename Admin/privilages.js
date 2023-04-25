@@ -1,6 +1,7 @@
 const User = require('../models/User');
 const Poll = require('../models/Polls');
 const Question = require('../models/Question');
+const Promoted = require('../models/Promoted');
 dotenv = require('dotenv').config();
 
 
@@ -52,49 +53,7 @@ const removeUser = async (req, res) => {
                 _id:poll._id
             });
         }
-    }
-
-    // // udelete from the follower list
-    // for(let i=0;i<removinguser.followers.length;i++){
-    //     const faltufollwer = await User.findOne({
-    //         _id:removinguser.followers[i]
-    //     });
-    //     if(faltufollwer){
-    //         await User.findOneAndUpdate({
-    //             _id:faltufollwer._id
-    //         },{
-    //             $pop:{
-    //                 "following":removinguser._id
-    //             }
-    //         },{
-    //             upsert:true,
-    //             multi:true
-    //         })
-    //      }
-    // }
-
-    // // delete removing user follwing list
-    // console.log(removinguser.following.length);
-    // for(let i=0;i<removinguser.following.length;i++){   
-    //     const faltufollwing = await User.findOne({
-    //         _id:removinguser.following[i]
-    //     });
-    //     if(faltufollwing){
-    //         await User.findOneAndUpdate({
-    //             _id:faltufollwing._id
-    //         },{
-    //             $pop:{
-    //                 "follower":removinguser._id
-    //             }
-    //         },{
-    //             upsert:true,
-    //             multi:true
-    //         })
-    //     }
-    // }
-
-    
-            
+    }        
     // remove user from following list of its followers
     for(let i=0; i<removinguser.followers.length; i++){
         try{
@@ -151,7 +110,7 @@ const removePoll = async (req, res) => {
 
     // if the poll is promoted then remove it from the promoted polls list
     try{
-        await PromotedPoll.findOneAndDelete({
+        await Promoted.findOneAndDelete({
             pollid: poll._id
         });
     } catch(err){

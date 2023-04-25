@@ -53,7 +53,16 @@ const userSchema = new mongoose.Schema({
     pollsanswered:{
         type: Number,
         default:0
-    }
+    },
+    instagram: {
+        type: String,
+    },
+    facebook: {
+        type: String,
+    },
+    twitter: {
+        type: String,
+    },
 });
 
 // make the model
