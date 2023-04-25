@@ -35,7 +35,7 @@ const UserProfile = async (req, res) => {
 const UpadteProfile = async (req, res) => {
 
     const uID = req.params.id;
-    const currUser = req.body;
+    const {currUser} = req.body;
 
     if(currUser.password){
         return res.status(400).send({

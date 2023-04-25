@@ -133,7 +133,6 @@ const removeUser = async (req, res) => {
 // make function to remove a poll
 const removePoll = async (req, res) => {
     const {pollid} = req.body;
-
     // check if the admin is a valid user and is an admin
     let admin = await User.findById(req.decoded.userId);
     if(!admin || admin.role != "admin"){
@@ -201,16 +200,17 @@ const removePoll = async (req, res) => {
 
 // promote a user to admin
 const promoteUser = async (req, res) => {
-    const {userid} = req.body;
+    const {username} = req.body;
 
     // check if the admin is a valid user and is an admin
     let admin = await User.findById(req.decoded.userId);
+    let userid = await User.findOne({username: username});
     if(!admin || admin.role != "admin"){
         return res.status(400).send({
             "message":"You are not authorized to perform this action."
         });
     }
-
+    userid = userid._id;
     // check if the user to be promoted is a valid user
     const promotinguser = await User.findById(userid);
     if(!promotinguser){
@@ -243,8 +243,9 @@ const promoteUser = async (req, res) => {
 
 // demote a user to normal user
 const demoteUser = async (req, res) => {
-    const {userid} = req.body;
-
+    const {username} = req.body;
+    let userid = await User.findOne({username: username});
+    userid = userid._id;
     // check if the admin is a valid user and is an admin
     let admin = await User.findById(req.decoded.userId);
     if(!admin || admin.role != "admin"){
@@ -252,6 +253,7 @@ const demoteUser = async (req, res) => {
             "message":"You are not authorized to perform this action."
         });
     }
+
 
     // check if the user to be demoted is a valid user
     const demotinguser = await User.findById(userid);
@@ -282,6 +284,35 @@ const demoteUser = async (req, res) => {
     }
 };
 
+const getSingleUserInfo = async (req, res) => {
+    const {username} = req.body;
+    let userid = req.decoded.userId;
+    let admin = await User.findById(req.decoded.userId);
+    if(!admin || admin.role != "admin"){
+        return res.status(400).send({
+            "message":"You are not authorized to perform this action."
+        });
+    }
+    const dbuserid = await User.findOne({username: username});
+    if(!dbuserid){
+        return res.status(400).send({
+            "message":"User does not exist."
+        });
+    }
+    try{
+        res.status(200).send({
+            "message":"User found.",
+            "user": dbuserid
+        });
+    } catch(err){
+        res.status(500).send({
+            "message":"Error getting user info.",
+            "error": err
+        });
+    }
+};
+
+
 
 
     
@@ -289,7 +320,8 @@ module.exports = {
     removeUser,
     removePoll,
     promoteUser,
-    demoteUser
+    demoteUser,
+    getSingleUserInfo
 };
 
     
