@@ -10,7 +10,7 @@ const { removeUser, removePoll,getSingleUserInfo,demoteUser,promoteUser } = requ
 const {getAllUsers,getAllPolls} = require("./Admin/adminview");
 const SendpolltoUser = require("./Polls/SendUser");
 const {TakeUserResponse} = require("./Polls/TakeResponse");
-const createPolls = require("./Polls/CreatePolls");
+const createPolls = require("./Polls/createPolls");
 
 const {getPromotedPolls,updatePromotedPolls,removePromotedPolls} = require('./FeedPage/GetPromotedPolls');   
 
