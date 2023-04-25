@@ -23,7 +23,7 @@ const getAllUsers = async (req, res) => {
         });
     } catch(err){
         res.status(500).send({
-            "message":"Error fetching all users.",
+            "errormessage":"Error fetching all users.",
             "error": err
         });
     }
@@ -32,24 +32,25 @@ const getAllUsers = async (req, res) => {
 
 // make function to get all polls
 const getAllPolls = async (req, res) => {
-
+    const {pollid} = req.body;
     // check if the admin is a valid user and is an admin
     let admin = await User.findById(req.decoded.userId);
     if(!admin || admin.role != "admin"){
         return res.status(400).send({
-            "message":"You are not authorized to perform this action."
+            "errormessage":"You are not authorized to perform this action."
         });
     }
     
     try {
-        const allPolls = await Poll.find();
+        const allPolls = await Poll.findById(pollid);
+        console.log(allPolls);
         res.status(200).send({
             "message":"All polls fetched successfully.",
             "data": allPolls
         });
     } catch(err){
         res.status(500).send({
-            "message":"Error fetching all polls.",
+            "errormessage":"Error fetching all polls.",
             "error": err
         });
     }

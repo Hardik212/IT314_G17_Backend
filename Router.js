@@ -4,9 +4,10 @@ const router = express.Router();
 // import controller functions
 const { RegisterUser, LoginUser } = require("./auth/Register");
 
+
 const { UserProfile, UpadteProfile, OtherUserProfile } = require("./profile/Profile");
-const { removeUser, removePoll, promoteUser, demoteUser } = require("./Admin/privilages");
-const { getAllUsers, getAllPolls } = require("./Admin/adminview");
+const { removeUser, removePoll,getSingleUserInfo,demoteUser,promoteUser } = require("./Admin/privilages");
+const {getAllUsers,getAllPolls} = require("./Admin/adminview");
 const SendpolltoUser = require("./Polls/SendUser");
 const {TakeUserResponse} = require("./Polls/TakeResponse");
 const createPolls = require("./Polls/CreatePolls");
@@ -39,15 +40,13 @@ router.put("/updateProfile/:id", checklogin, UpadteProfile); // check login and 
 
 
 // routes for admin side
-router.post("/removeuser", checklogin,removeUser); // remove user
+router.post("/removeuser", checklogin, removeUser); // remove user
 router.post("/removepoll",checklogin, removePoll); // remove poll
-router.post("/promoteuser", checklogin,promoteUser); // promote user
-router.post("/demoteuser", checklogin,demoteUser); // demote user
-
-// routes for admin view
-router.post("/getallusers", checklogin,getAllUsers); // get all users
-router.post("/getallpolls", checklogin,getAllPolls); // get all polls
-
+router.post("/getallusers",checklogin, getAllUsers); // get all users
+router.post('/getallpolls',checklogin,getAllPolls); // get all polls
+router.post("/getsingleuserinfo",checklogin, getSingleUserInfo); // get single user info")
+router.post("/promoteuser",checklogin, promoteUser); // promote user
+router.post("/demoteuser",checklogin, demoteUser); // demote user
 
 // polls and survey show routes
 router.post('/getpoll/:id',SendpolltoUser);
@@ -65,7 +64,7 @@ router.post('/createpoll',createPolls); // add login check
 
 
 // feed page routes feedpage + promoted polls
-router.post('/feed/:num',checklogin,getFeedItems);
+router.post('/feed/:num',getFeedItems);
 router.post('/getpromoted',checklogin,getPromotedPolls);
 router.post('/updatepromoted',checklogin,updatePromotedPolls);
 router.post('/removepromotedpolls',checklogin,removePromotedPolls);
