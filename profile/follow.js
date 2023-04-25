@@ -130,8 +130,18 @@ const getFollowers = async (req, res) => {
     }
 
     // get the followers list of the user
-    followers_list = (await User.findById(userId)).followers;
-
+    const followers_idlist = (await User.findById(userId)).followers;
+    
+    // get username and name of each follower in a  list
+    let followers_list = [];
+    for (let i = 0; i < followers_idlist.length; i++) {
+        const follower = await User.findById(followers_idlist[i]);
+        followers_list.push({
+            "username":follower.username,
+            "name":follower.name,
+            "id": follower._id
+        });
+    }
     // return the followers list
     return res.status(200).send({
         "followers":followers_list
@@ -153,7 +163,20 @@ const getFollowing = async (req, res) => {
     }
 
     // get the following list of the user
-    following_list = (await User.findById(userId)).following;
+    const following_idlist = (await User.findById(userId)).following;
+
+    // get username and name of each following user in a list
+    let following_list = [];
+    for (let i = 0; i < following_idlist.length; i++) {
+        const following = await User.findById(following_idlist[i]);
+        following_list.push({
+            "username":following.username,
+            "name":following.name,
+            "id": following._id
+        });
+    }
+
+
 
     // return the following list
     return res.status(200).send({

@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { INTEGER } = require("sequelize");
 
 const userSchema = new mongoose.Schema({
     username: {
@@ -48,8 +49,11 @@ const userSchema = new mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: "Poll",
         },
-    ]
-
+    ],
+    pollsanswered:{
+        type: Number,
+        default:0
+    }
 });
 
 // make the model
