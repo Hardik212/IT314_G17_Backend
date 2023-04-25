@@ -41,12 +41,17 @@ const getAllPolls = async (req, res) => {
         });
     }
     
+
     try {
         const allPolls = await Poll.findById(pollid);
+        let polldetails=[];
+        const creatoruser = await User.findById(allPolls.creator);
+        polldetails.push(creatoruser);
+        polldetails.push(allPolls);
         console.log(allPolls);
         res.status(200).send({
             "message":"All polls fetched successfully.",
-            "data": allPolls
+            "data": polldetails
         });
     } catch(err){
         res.status(500).send({
