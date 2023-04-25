@@ -2,6 +2,7 @@ const Poll = require("../models/Polls");
 const Response = require("../models/Response");
 const Question = require("../models/Question");
 const User = require("../models/User");
+const { update } = require("lodash");
 
 const TakeUserResponse = async (req, res) => {
    const {pollid,userid,responses} = req.body;
@@ -27,6 +28,21 @@ const TakeUserResponse = async (req, res) => {
             "message":"poll not found",
         })
     }
+
+    // check if the user is a valid user and increase its polls answered
+    let respondinguser;
+    try{
+        respondinguser = await User.findById(userid);
+    }catch(err){
+        return res.status(401).send({
+          error: "internal server error",
+          "error-message": err,
+        });
+    }
+    if(respondinguser){
+        await User.findByIdAndUpdate(userid, {$inc: {pollsanswered: 1}});
+    }
+
 
     const schemaresponse = await Response.findOne({pollid:pollid});
 
