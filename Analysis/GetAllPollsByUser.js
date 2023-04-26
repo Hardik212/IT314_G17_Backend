@@ -35,7 +35,15 @@ const getDetailsAboutPoll = async (req, res) => {
             "message":"pollid is required",
         })
     }
-
+    let ispollexist;
+    try{
+        ispollexist = await Poll.findById(pollid);
+    }catch(err){
+        return res.status(401).send({
+            "message":"poll not found",
+        })
+    }
+    
     const pollanalysisobj = [];
     const pollresponse = await Response.findOne({pollid:pollid});
     if(!pollresponse){

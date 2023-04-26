@@ -60,7 +60,7 @@ router.post('/following',checklogin,getFollowing);
 
 
 router.post('/takeresponse',TakeUserResponse);
-router.post('/createpoll',createPolls); // add login check
+router.post('/createpoll',checklogin,createPolls); // add login check
 
 
 // feed page routes feedpage + promoted polls

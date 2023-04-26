@@ -2,13 +2,17 @@ const Poll = require("../models/Polls");
 const Response = require("../models/Response");
 const Question = require("../models/Question");
 const User = require("../models/User");
-const { update } = require("lodash");
 
 const TakeUserResponse = async (req, res) => {
    const {pollid,userid,responses} = req.body;
     if(!pollid){
         return res.status(401).send({
             "message":"pollid is required",
+        })
+    }
+    if(!responses){
+        return res.status(401).send({
+            "message":"responses is required",
         })
     }
 
@@ -31,23 +35,32 @@ const TakeUserResponse = async (req, res) => {
 
     // check if the user is a valid user and increase its polls answered
     let respondinguser;
-    try{
-        respondinguser = await User.findById(userid);
-    }catch(err){
-        return res.status(401).send({
-          error: "internal server error",
-          "error-message": err,
-        });
+    if(userid){
+        try{
+            respondinguser = await User.findById(userid);
+        }catch(err){
+            return res.status(401).send({
+            error: "internal server error",
+            "error-message": err,
+            });
+        }
     }
+
     if(respondinguser){
         await User.findByIdAndUpdate(userid, {$inc: {pollsanswered: 1}});
     }
 
-
-    const schemaresponse = await Response.findOne({pollid:pollid});
-
-    // save user to database
-    // update the count in the database response by the given response
+    let schemaresponse;
+    try{
+        schemaresponse = await Response.findOne({pollid:pollid});
+    }catch(err){
+        return res.status(401).send({
+            "message":"internal server error",
+            "error":err,
+        })
+    }
+    console.log(schemaresponse);
+    console.log(responses);
     let userresponse = [];
     for(let i=0;i<responses.length;i++){
         if(responses[i].questionresponse.length===0){

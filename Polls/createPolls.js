@@ -116,7 +116,7 @@ const createPolls = async (req, res) => {
 
     return res.status(200).send({
         "message":"poll created successfully",
-        "pollurl":"http://localhost:3000/api/"+poll._id,
+        "pollurl":`http://localhost:5500/poll.html/?pollid=${poll._id}`,
         "poll":poll
     })
 

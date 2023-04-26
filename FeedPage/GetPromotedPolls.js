@@ -10,16 +10,38 @@ const getPromotedPolls = async (req, res) => {
     const userid = req.decoded.userId;
     console.log(userid);
     const userinfo = await User.findById(userid);
-    console.log(userinfo);
-    if(userinfo.role != 'admin'){
-        return res.status(401).json({ message: 'Unauthorized' });
-    }
 
     try {
         const promotedPolls = await Promoted.find();
+        if(promotedPolls.length == 0){
+            return res.status(404).json({ message: 'No promoted polls found' });
+        }
+        const promotedPollsData = [];
+        for(let i=0;i<promotedPolls.length;i++){
+            let pollzz;
+            let usernameee;
+            try{
+                pollzz = await Poll.findById(promotedPolls[i].pollid);
+            }catch{
+                continue;
+            }
+            try{
+                usernameee = await User.findById(pollzz.creator);
+            }catch{
+                continue;
+            }
+            const pollData = {
+                pollid: pollzz._id,
+                title: pollzz.title,
+                description: pollzz.description,
+                creator: usernameee.username,
+            };
+            promotedPollsData.push(pollData);
+        }
+
         res.status(200).json({
             message: 'Promoted polls served',
-            data: promotedPolls
+            data: promotedPollsData
         });
     } catch (error) {
         res.status(500).json({ message: 'Server Error' });
