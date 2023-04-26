@@ -80,8 +80,16 @@ const unfollowUser = async (req, res) => {
     }
     
     // find the user id of the target user from the username
-    const unfollowId = (await User.findOne({username: unfollowname}))._id;
-    
+    const unfolloweduser = (await User.findOne({username: unfollowname}));
+        
+    // check if the followname exists in the database
+    if(!unfolloweduser){
+        return res.status(400).send({
+            "message":"Target user does not exist." 
+        });
+    }
+    const unfollowId = unfolloweduser._id;
+
     // check if the followname exists in the database
     if(!unfollowId){
         return res.status(400).send({

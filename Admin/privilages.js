@@ -169,6 +169,13 @@ const promoteUser = async (req, res) => {
             "message":"You are not authorized to perform this action."
         });
     }
+
+    if(!userid){
+        return res.status(400).send({
+            "message":"User does not exist."
+        });
+    }
+
     userid = userid._id;
     // check if the user to be promoted is a valid user
     const promotinguser = await User.findById(userid);
@@ -204,6 +211,11 @@ const promoteUser = async (req, res) => {
 const demoteUser = async (req, res) => {
     const {username} = req.body;
     let userid = await User.findOne({username: username});
+    if(!userid){
+        return res.status(400).send({
+            "message":"User does not exist."
+        });
+    }
     userid = userid._id;
     // check if the admin is a valid user and is an admin
     let admin = await User.findById(req.decoded.userId);
