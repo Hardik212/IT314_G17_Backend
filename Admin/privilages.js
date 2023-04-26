@@ -1,6 +1,7 @@
 const User = require('../models/User');
 const Poll = require('../models/Polls');
 const Question = require('../models/Question');
+const Promoted = require('../models/Promoted');
 dotenv = require('dotenv').config();
 
 
@@ -52,49 +53,7 @@ const removeUser = async (req, res) => {
                 _id:poll._id
             });
         }
-    }
-
-    // // udelete from the follower list
-    // for(let i=0;i<removinguser.followers.length;i++){
-    //     const faltufollwer = await User.findOne({
-    //         _id:removinguser.followers[i]
-    //     });
-    //     if(faltufollwer){
-    //         await User.findOneAndUpdate({
-    //             _id:faltufollwer._id
-    //         },{
-    //             $pop:{
-    //                 "following":removinguser._id
-    //             }
-    //         },{
-    //             upsert:true,
-    //             multi:true
-    //         })
-    //      }
-    // }
-
-    // // delete removing user follwing list
-    // console.log(removinguser.following.length);
-    // for(let i=0;i<removinguser.following.length;i++){   
-    //     const faltufollwing = await User.findOne({
-    //         _id:removinguser.following[i]
-    //     });
-    //     if(faltufollwing){
-    //         await User.findOneAndUpdate({
-    //             _id:faltufollwing._id
-    //         },{
-    //             $pop:{
-    //                 "follower":removinguser._id
-    //             }
-    //         },{
-    //             upsert:true,
-    //             multi:true
-    //         })
-    //     }
-    // }
-
-    
-            
+    }        
     // remove user from following list of its followers
     for(let i=0; i<removinguser.followers.length; i++){
         try{
@@ -151,7 +110,7 @@ const removePoll = async (req, res) => {
 
     // if the poll is promoted then remove it from the promoted polls list
     try{
-        await PromotedPoll.findOneAndDelete({
+        await Promoted.findOneAndDelete({
             pollid: poll._id
         });
     } catch(err){
@@ -210,6 +169,13 @@ const promoteUser = async (req, res) => {
             "message":"You are not authorized to perform this action."
         });
     }
+
+    if(!userid){
+        return res.status(400).send({
+            "message":"User does not exist."
+        });
+    }
+
     userid = userid._id;
     // check if the user to be promoted is a valid user
     const promotinguser = await User.findById(userid);
@@ -245,6 +211,11 @@ const promoteUser = async (req, res) => {
 const demoteUser = async (req, res) => {
     const {username} = req.body;
     let userid = await User.findOne({username: username});
+    if(!userid){
+        return res.status(400).send({
+            "message":"User does not exist."
+        });
+    }
     userid = userid._id;
     // check if the admin is a valid user and is an admin
     let admin = await User.findById(req.decoded.userId);

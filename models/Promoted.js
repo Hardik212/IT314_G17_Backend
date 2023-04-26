@@ -2,12 +2,12 @@
 const mongoose = require('mongoose');
 
 const PromotedSchema = new mongoose.Schema({
-    pollid: [{
+    pollid: {
         type: mongoose.Schema.Types.ObjectId,
         ref:'Poll',
         required:true,
         unique:true
-    }],
+    },
 });
 
 

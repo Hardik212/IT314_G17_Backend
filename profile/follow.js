@@ -8,16 +8,17 @@ const followUser = async (req, res) => {
     const followname = req.params.username;
     console.log("follow user called for "+followname);
 
-    
+
     // find the user id of the target user from the username
-    const followId = (await User.findOne({username: followname}))._id;
-    console.log("follow id is "+followId);
+    const followeduser = (await User.findOne({username: followname}));
     // check if the followname exists in the database
-    if(!followId){
+    if(!followeduser){
         return res.status(400).send({
             "message":"Target user does not exist."
         });
     }
+    const followId = followeduser._id;
+    console.log("follow id is "+followId);
 
     // check if the user is a valid user
     let callinguser = await User.findById(userId);    
@@ -79,8 +80,16 @@ const unfollowUser = async (req, res) => {
     }
     
     // find the user id of the target user from the username
-    const unfollowId = (await User.findOne({username: unfollowname}))._id;
-    
+    const unfolloweduser = (await User.findOne({username: unfollowname}));
+        
+    // check if the followname exists in the database
+    if(!unfolloweduser){
+        return res.status(400).send({
+            "message":"Target user does not exist." 
+        });
+    }
+    const unfollowId = unfolloweduser._id;
+
     // check if the followname exists in the database
     if(!unfollowId){
         return res.status(400).send({

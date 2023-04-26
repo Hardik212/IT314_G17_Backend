@@ -62,7 +62,7 @@ const RegisterUser = async (req, res) => {
     role,
   });
 
-  var token = jwt.sign({ user_id: user._id }, process.env.JWT_SECRET);
+  // var token = jwt.sign({ user_id: user._id }, process.env.JWT_SECRET);
 
   // save the user object into the mongodb database'
   try {
@@ -112,7 +112,6 @@ const LoginUser = async (req, res) => {
         error: "Invalid credentials in email.",
       });
     }
-
     // check whether the password is correct or not
     const isPasswordCorrect = await bcrypt.compare(
       password,
