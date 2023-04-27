@@ -62,7 +62,7 @@ const userSchema = new mongoose.Schema({
     },
     twitter: {
         type: String,
-    },
+    }
 });
 
 // make the model

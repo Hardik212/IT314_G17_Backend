@@ -64,7 +64,7 @@ router.post('/createpoll',checklogin,createPolls); // add login check
 
 
 // feed page routes feedpage + promoted polls
-router.post('/feed/:num',getFeedItems);
+router.post('/feed',getFeedItems);
 router.post('/getpromoted',checklogin,getPromotedPolls);
 router.post('/updatepromoted',checklogin,updatePromotedPolls);
 router.post('/removepromotedpolls',checklogin,removePromotedPolls);

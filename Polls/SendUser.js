@@ -6,7 +6,6 @@ const SendpolltoUser = async (req, res) => {
   const id = req.params.id;
 
   if (!id) {
-    res.redirect("landing.html");
     return res.status(401).send({
       message: "Redirect to homepage",
     });
@@ -28,6 +27,47 @@ const SendpolltoUser = async (req, res) => {
   if (!ispollexist) {
     return res.status(401).send({
       error: "poll not exist",
+    });
+  }
+
+  /* is poll private or not */
+  if(ispollexist.isprivate && req.decoded == undefined){
+    return res.status(403).send({
+      error: "poll is private,Need to login.",
+    });
+  }
+  if(ispollexist.isprivate){
+  const currentUser = req.decoded.userId;
+  const pollcreatorUser = ispollexist.creator;
+  let pollcreatorUserobj;
+  try{
+    pollcreatorUserobj = await User.findById(pollcreatorUser);
+  }catch(err){
+    return res.status(401).send({
+      error: "internal server error",
+      "error-message": err,
+    });
+  }
+
+  for(let i = 0;i<pollcreatorUserobj.followers.length;i++){
+    if(pollcreatorUserobj.followers[i] == currentUser){
+      break;
+    }
+    if(i == pollcreatorUserobj.followers.length-1){
+      return res.status(403).send({
+        error: "poll is private",
+      });
+    }
+  }
+}
+
+
+
+
+
+  if(ispollexist.endedAt < Date.now()){
+    return res.status(406).send({
+      error: "poll is ended",
     });
   }
 

@@ -24,7 +24,8 @@ const GetAllPollsByUser = async (req, res) => {
     
     return res.status(200).send({
         "message":"polls found",
-        "polls":polls
+        "polls":polls,
+        'user':userid,
     });
 }
 
@@ -82,6 +83,7 @@ const getDetailsAboutPoll = async (req, res) => {
     return res.status(200).send({
         "message":"poll analysis found",
         "pollanalysisobj":pollanalysisobj,
+       
 
     });
 }

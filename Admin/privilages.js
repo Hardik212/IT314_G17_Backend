@@ -233,6 +233,7 @@ const demoteUser = async (req, res) => {
             "message":"User does not exist."
         });
     }
+    
 
     // check if the user is already a normal user
     if(demotinguser.role == "user"){

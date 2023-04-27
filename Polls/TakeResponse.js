@@ -27,11 +27,13 @@ const TakeUserResponse = async (req, res) => {
         });
     }
 
+
     if(!ispollexist){
         return res.status(401).send({
             "message":"poll not found",
         })
     }
+
 
     // check if the user is a valid user and increase its polls answered
     let respondinguser;
@@ -45,31 +47,36 @@ const TakeUserResponse = async (req, res) => {
             });
         }
     }
-
+    console.log(userid);
+    console.log(respondinguser);
     if(respondinguser){
-        await User.findByIdAndUpdate(userid, {$inc: {pollsanswered: 1}});
+        console.log("hi");
+        await User.findByIdAndUpdate(respondinguser._id, {$inc: {pollsanswered: 1}});
     }
 
     let schemaresponse;
     try{
-        schemaresponse = await Response.findOne({pollid:pollid});
+        schemaresponse = await Response.findOne({"pollid":ispollexist._id});
     }catch(err){
         return res.status(401).send({
             "message":"internal server error",
             "error":err,
         })
     }
-    console.log(schemaresponse);
-    console.log(responses);
+    if(!schemaresponse.answers){
+        return res.status(401).send({
+            "message":"Harsh Error",
+        })
+    }
+
     let userresponse = [];
     for(let i=0;i<responses.length;i++){
-        if(responses[i].questionresponse.length===0){
+        if(responses[i].questionresponse.length == 0  || responses[i].questionresponse == ""){
             return res.status(401).send({
-                "message":"please select atleast one option",
+                "message":"please respond to all questions",
             })
         }
         else if(responses[i].questionid == schemaresponse.answers[i].questionid){
-            console.log(responses[i].questionresponse)
             userresponse.push(responses[i].questionresponse);
             await Response.findOneAndUpdate({
               "pollid":pollid,
@@ -96,7 +103,6 @@ const TakeUserResponse = async (req, res) => {
                 "responses":userresponse,
             }
         });
-        console.log(savedresponse);
     }catch(err){
         return res.status(401).send({
             "message":"internal server error",

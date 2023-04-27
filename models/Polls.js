@@ -30,6 +30,10 @@ const pollSchema = new mongoose.Schema({
         type: Date,
         default: null,
     },
+    isprivate: {
+        type: Boolean,
+        default: false,
+    }
     
 
 });
