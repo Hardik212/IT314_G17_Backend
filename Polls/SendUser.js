@@ -36,8 +36,8 @@ const SendpolltoUser = async (req, res) => {
       error: "poll is private,Need to login.",
     });
   }
+  let currentUser = req.body.currentUser;
   if(ispollexist.isprivate){
-  const currentUser = req.body.currentUser;
   const pollcreatorUser = ispollexist.creator;
   let pollcreatorUserobj;
   try{
