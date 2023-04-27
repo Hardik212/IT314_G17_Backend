@@ -59,7 +59,14 @@ const SendpolltoUser = async (req, res) => {
       });
     }
   }
+  if(req.body.currentUser != pollcreatorUser){      // added for allowing creator to see result
+    return res.status(403).send({
+      error: "poll is private",
+    });
+  }
 }
+
+
 
 
 
