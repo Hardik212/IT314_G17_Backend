@@ -53,7 +53,7 @@ const SendpolltoUser = async (req, res) => {
     if(pollcreatorUserobj.followers[i] == currentUser){
       break;
     }
-    if(i == pollcreatorUserobj.followers.length-1){
+    if(i == pollcreatorUserobj.followers.length-1 && currentUser != pollcreatorUser){      // added for allowing creator to see result
       return res.status(403).send({
         error: "poll is private",
       });
