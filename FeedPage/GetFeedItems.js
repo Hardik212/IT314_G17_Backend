@@ -61,7 +61,7 @@ const getFeedItems = async (req, res) => {
                 feedItems.push(feedItem);
                 continue;
             }
-            feedItem.totalresponses = responses.answers[i].questionresponse.length;
+//             feedItem.totalresponses = responses.answers[i].questionresponse.length;
             feedItems.push(feedItem);
         
         }
