@@ -77,6 +77,7 @@ const SendpolltoUser = async (req, res) => {
   pollobj.title = ispollexist.title;
   pollobj.description = ispollexist.description;
   pollobj.questions = [];
+  pollobj.creator = ispollexist.creator;  // added for private result access
 
   for (let i = 0; i < ispollexist.questions.length; i++) {
     const qid = ispollexist.questions[i];
