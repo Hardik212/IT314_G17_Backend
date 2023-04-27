@@ -56,13 +56,13 @@ const getFeedItems = async (req, res) => {
                 })
             }
 
-            if(responses == undefined || responses == null || responses.length == 0){
+//             if(responses == undefined || responses == null || responses.length == 0){
                 feedItem.totalresponses = 0;
                 feedItems.push(feedItem);
-                continue;
-            }
+//                 continue;
+//             }
 //             feedItem.totalresponses = responses.answers[i].questionresponse.length;
-            feedItems.push(feedItem);
+//             feedItems.push(feedItem);
         
         }
 
