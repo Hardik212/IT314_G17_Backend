@@ -31,6 +31,7 @@ const getFeedItems = async (req, res) => {
             feedItem.pollDescription = poll.description;
             feedItem.createdAt = poll.createdAt;
             feedItem.endedAt = poll.endedAt;
+            feedItem.isprivate = poll.isprivate;   // added
             if(poll.responses){
                 feedItem.totalresponses = poll.responses;
             }
@@ -67,7 +68,7 @@ const getFeedItems = async (req, res) => {
         }
 
         res.status(200).json({
-            "message": "fetched next 10 polls with response count",
+            "message": "fetched next 10 polls with privatization",
             "feedItems": feedItems,
         })
     }catch(err){
