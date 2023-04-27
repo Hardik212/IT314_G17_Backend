@@ -57,17 +57,17 @@ const getFeedItems = async (req, res) => {
             }
 
 //             if(responses == undefined || responses == null || responses.length == 0){
-                feedItem.totalresponses = 0;
-                feedItems.push(feedItem);
+//                 feedItem.totalresponses = 0;
+//                 feedItems.push(feedItem);
 //                 continue;
 //             }
 //             feedItem.totalresponses = responses.answers[i].questionresponse.length;
-//             feedItems.push(feedItem);
+            feedItems.push(feedItem);
         
         }
 
         res.status(200).json({
-            "message": "fetched next 10 polls",
+            "message": "fetched next 10 polls with response count",
             "feedItems": feedItems,
         })
     }catch(err){
