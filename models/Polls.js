@@ -33,8 +33,11 @@ const pollSchema = new mongoose.Schema({
     isprivate: {
         type: Boolean,
         default: false,
+    },
+    responses: {
+        type: Number,
+        default:0
     }
-    
 
 });
 
