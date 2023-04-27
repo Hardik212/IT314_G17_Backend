@@ -31,6 +31,9 @@ const getFeedItems = async (req, res) => {
             feedItem.pollDescription = poll.description;
             feedItem.createdAt = poll.createdAt;
             feedItem.endedAt = poll.endedAt;
+            if(poll.responses){
+                feedItem.totalresponses = poll.responses;
+            }
             if(poll.questions.length == 1){
                 feedItem.questionType = "single";
                 let question = await Question.findById(poll.questions[0]);

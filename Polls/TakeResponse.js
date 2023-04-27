@@ -34,6 +34,9 @@ const TakeUserResponse = async (req, res) => {
         })
     }
 
+    //increase the poll response count
+    await Poll.findByIdAndUpdate(ispollexist._id, {$inc: {responses: 1}});
+
 
     // check if the user is a valid user and increase its polls answered
     let respondinguser;
