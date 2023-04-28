@@ -4,24 +4,60 @@ const User = require('../models/User');
 const Response = require('../models/Response')
 
 const createPolls = async (req, res) => {
-    const { title, description, questions, userid } = req.body;
+    const { title, description, questions, userid, endedAt, isprivate} = req.body;
+    console.log(req.body.endedAt);
     if(!title){
-        return res.status(401).send({
+        return res.status(400).send({
             "message":"title is required",
         })
     }
     if(!description){
-        return res.status(401).send({
+        return res.status(400).send({
             "message":"description is required",
         })
     }
     if(!questions){
-        return res.status(401).send({
+        return res.status(400).send({
             "message":"questions are required",
         })
     }
+    if(!endedAt){
+        return res.status(400).send({
+            "message":"Please provide the end date of the poll",
+        })
+    }
+
+    if(endedAt < Date.now()){
+        return res.status(400).send({
+            "message":"Please provide a valid end date of the poll",
+        })
+    }
+
+    if(questions.length === 0){
+        return res.status(400).send({
+            "message":"questions are required",
+        })
+    }
+    questions.forEach((question) => {
+        if(!question.question || question.question === ""){
+            return res.status(400).send({
+                "message":"question is required",
+            })
+        }
+        if(!question.type || question.type === ""){
+            return res.status(400).send({
+                "message":"type is required",
+            })
+        }
+        if(question.type === '1' && !question.options){
+            return res.status(400).send({
+                "message":"options are required",
+            })
+        }
+    })
+
     if(!userid){
-        return res.status(401).send({
+        return res.status(400).send({
             "message":"userid is required",
         })
     }
@@ -79,6 +115,8 @@ const createPolls = async (req, res) => {
         "description":description,
         "questions":questionids,
         "creator":userid,
+        "endedAt":endedAt,
+        "isprivate":isprivate
     });
     try{
         await poll.save();
@@ -103,8 +141,6 @@ const createPolls = async (req, res) => {
         "answers":questionidresponseobj,
         "userresponse":[]
     });
-    console.log(response);
-    console.log(poll._id);
     try{
         await response.save();
     }catch(err){
@@ -116,7 +152,7 @@ const createPolls = async (req, res) => {
 
     return res.status(200).send({
         "message":"poll created successfully",
-        "pollurl":`http://localhost:5500/poll.html/?pollid=${poll._id}`,
+        "pollurl":`https://quickpollz.netlify.app/poll.html?pollid=${poll._id}`,
         "poll":poll
     })
 

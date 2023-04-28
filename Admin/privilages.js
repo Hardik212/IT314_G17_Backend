@@ -3,7 +3,8 @@ const Poll = require('../models/Polls');
 const Question = require('../models/Question');
 const Promoted = require('../models/Promoted');
 dotenv = require('dotenv').config();
-
+const nodemailer = require("nodemailer");
+// const {sendmailUtils} = require('../sendmail');
 
 
 // make function to remove a user
@@ -80,9 +81,14 @@ const removeUser = async (req, res) => {
     
     
     // delete user
+    // console.log(removinguser.email);
+    // await sendmailUtils("202001145@daiict.ac.in", "Account Deleted", "Your account has been deleted by the admin. If you think this is a mistake, please contact the admin.")
     await User.findByIdAndDelete({
         _id:removinguser._id
     });
+
+
+
     res.status(200).send({
         "message":"User and its data removed successfully!"
     })
@@ -233,6 +239,7 @@ const demoteUser = async (req, res) => {
             "message":"User does not exist."
         });
     }
+    
 
     // check if the user is already a normal user
     if(demotinguser.role == "user"){

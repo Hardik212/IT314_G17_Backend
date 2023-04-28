@@ -6,7 +6,6 @@ const SendpolltoUser = async (req, res) => {
   const id = req.params.id;
 
   if (!id) {
-    res.redirect("landing.html");
     return res.status(401).send({
       message: "Redirect to homepage",
     });
@@ -31,12 +30,65 @@ const SendpolltoUser = async (req, res) => {
     });
   }
 
+  /* is poll private or not */
+  if(ispollexist.isprivate && req.body.currentUser == ""){
+    return res.status(403).send({
+      error: "poll is private,Need to login.",
+    });
+  }
+  let currentUser = req.body.currentUser;
+  if(ispollexist.isprivate){
+  const pollcreatorUser = ispollexist.creator;
+  let pollcreatorUserobj;
+  try{
+    pollcreatorUserobj = await User.findById(pollcreatorUser);
+  }catch(err){
+    return res.status(401).send({
+      error: "internal server error",
+      "error-message": err,
+    });
+  }
+
+  for(let i = 0;i<pollcreatorUserobj.followers.length;i++){
+    if(pollcreatorUserobj.followers[i] == currentUser){
+      break;
+    }
+    if(i == pollcreatorUserobj.followers.length-1 && req.body.currentUser != pollcreatorUser){      // added for allowing creator to see result
+      return res.status(403).send({
+        error: "poll is private",
+      });
+    }
+  }
+  if(req.body.currentUser != pollcreatorUser){      // added for allowing creator to see result
+    return res.status(403).send({
+      error: "poll is private",
+    });
+  }
+}
+
+// / convet ISO and add OFFSET to it in date
+const OFFSET = 5;
+const OFFSET2 = 30;
+const ISO = new Date().toISOString();
+console.log(ISO);
+const date = new Date(ISO);
+// 5 hours and 30 minutes
+date.setHours(date.getHours() + OFFSET);
+date.setMinutes(date.getMinutes() + OFFSET2);
+  console.log(ispollexist.endedAt);
+  if(ispollexist.endedAt < date && ispollexist.creator != currentUser){
+    return res.status(406).send({
+      error: "poll is ended",
+    });
+  }
+
   // make the poll object and return
   let pollobj = {};
 
   pollobj.title = ispollexist.title;
   pollobj.description = ispollexist.description;
   pollobj.questions = [];
+  pollobj.creator = ispollexist.creator;  // added for private result access
 
   for (let i = 0; i < ispollexist.questions.length; i++) {
     const qid = ispollexist.questions[i];
