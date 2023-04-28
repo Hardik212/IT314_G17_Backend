@@ -24,6 +24,7 @@ const getFeedItems = async (req, res) => {
             var feedItem = {};
             let userinfo = await User.findById(poll.creator);
             feedItem.creatorname = userinfo.name;
+            feedItem.userid = userinfo._id;
             feedItem.username = userinfo.username;
             feedItem.profilepic = userinfo.profilepic;
             feedItem.pollId = poll._id;
