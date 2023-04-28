@@ -66,13 +66,17 @@ const SendpolltoUser = async (req, res) => {
   }
 }
 
-
-
-
-
-
-
-  if(ispollexist.endedAt < Date.now()){
+// / convet ISO and add OFFSET to it in date
+const OFFSET = 5;
+const OFFSET2 = 30;
+const ISO = new Date().toISOString();
+console.log(ISO);
+const date = new Date(ISO);
+// 5 hours and 30 minutes
+date.setHours(date.getHours() + OFFSET);
+date.setMinutes(date.getMinutes() + OFFSET2);
+  console.log(ispollexist.endedAt);
+  if(ispollexist.endedAt < date && ispollexist.creator != currentUser){
     return res.status(406).send({
       error: "poll is ended",
     });

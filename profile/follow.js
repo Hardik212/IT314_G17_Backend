@@ -20,6 +20,8 @@ const followUser = async (req, res) => {
     const followId = followeduser._id;
     console.log("follow id is "+followId);
 
+
+    
     // check if the user is a valid user
     let callinguser = await User.findById(userId);    
     if(!callinguser){
